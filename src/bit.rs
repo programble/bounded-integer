@@ -3,7 +3,7 @@
 use BoundedInteger;
 
 /// A bit.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[allow(missing_docs)]
 #[repr(u8)]
 pub enum Bit { U0, U1 }

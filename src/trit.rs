@@ -3,7 +3,7 @@
 use BoundedInteger;
 
 /// An unsigned trit.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[allow(missing_docs)]
 #[repr(u8)]
 pub enum UTrit { U0, U1, U2 }
@@ -27,7 +27,7 @@ impl BoundedInteger for UTrit {
 }
 
 /// A signed (balanced) trit.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[allow(missing_docs)]
 #[repr(u8)]
 pub enum STrit {

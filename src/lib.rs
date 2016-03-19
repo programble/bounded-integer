@@ -13,6 +13,8 @@
     variant_size_differences,
 )]
 
+use std::hash::Hash;
+
 /// Marker trait for integer representations.
 pub trait Repr: Copy { }
 
@@ -27,7 +29,7 @@ impl Repr for i32 { }
 impl Repr for i64 { }
 
 /// Bounded integer.
-pub trait BoundedInteger: Copy + Eq + Ord {
+pub trait BoundedInteger: Copy + Eq + Ord + Hash {
     /// Integer representation.
     type Repr: Repr;
 
