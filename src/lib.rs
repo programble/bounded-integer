@@ -16,18 +16,29 @@
 use std::hash::Hash;
 use std::ops::Add;
 
-/// Marker trait for integer representations.
-pub trait Repr: Copy + Add<Self, Output=Self> { }
+/// Trait for integer representations.
+pub trait Repr: Copy + Eq + Ord + Add<Self, Output=Self> {
+    /// Returns true if negative.
+    fn is_negative(self) -> bool { false }
+}
 
 impl Repr for u8 { }
 impl Repr for u16 { }
 impl Repr for u32 { }
 impl Repr for u64 { }
 
-impl Repr for i8 { }
-impl Repr for i16 { }
-impl Repr for i32 { }
-impl Repr for i64 { }
+impl Repr for i8 {
+    fn is_negative(self) -> bool { self.is_negative() }
+}
+impl Repr for i16 {
+    fn is_negative(self) -> bool { self.is_negative() }
+}
+impl Repr for i32 {
+    fn is_negative(self) -> bool { self.is_negative() }
+}
+impl Repr for i64 {
+    fn is_negative(self) -> bool { self.is_negative() }
+}
 
 /// Bounded integer.
 pub trait BoundedInteger: Copy + Eq + Ord + Hash {
@@ -54,6 +65,20 @@ pub trait BoundedInteger: Copy + Eq + Ord + Hash {
     /// Checked integer addition with representation.
     fn checked_add_repr(self, other: Self::Repr) -> Option<Self> {
         Self::from_repr(self.to_repr() + other)
+    }
+
+    /// Saturating integer addition.
+    fn saturating_add(self, other: Self) -> Self {
+        self.saturating_add_repr(other.to_repr())
+    }
+
+    /// Saturating integer addition with representation.
+    fn saturating_add_repr(self, other: Self::Repr) -> Self {
+        if other.is_negative() {
+            self.checked_add_repr(other).unwrap_or(Self::min_value())
+        } else {
+            self.checked_add_repr(other).unwrap_or(Self::max_value())
+        }
     }
 }
 
