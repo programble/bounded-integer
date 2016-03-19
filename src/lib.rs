@@ -22,7 +22,7 @@ impl Repr for u32 { }
 impl Repr for u64 { }
 
 /// Bounded integer.
-pub trait BoundedInteger: Copy {
+pub trait BoundedInteger: Copy + Eq + Ord {
     /// Integer representation.
     type Repr: Repr;
 
