@@ -32,3 +32,5 @@ pub trait BoundedInteger: Copy + Eq + Ord {
     /// Converts from Self to representation.
     fn to_repr(self) -> Self::Repr;
 }
+
+pub mod bit;
