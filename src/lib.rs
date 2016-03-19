@@ -21,6 +21,11 @@ impl Repr for u16 { }
 impl Repr for u32 { }
 impl Repr for u64 { }
 
+impl Repr for i8 { }
+impl Repr for i16 { }
+impl Repr for i32 { }
+impl Repr for i64 { }
+
 /// Bounded integer.
 pub trait BoundedInteger: Copy + Eq + Ord {
     /// Integer representation.
