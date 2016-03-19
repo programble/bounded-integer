@@ -14,9 +14,10 @@
 )]
 
 use std::hash::Hash;
+use std::ops::Add;
 
 /// Marker trait for integer representations.
-pub trait Repr: Copy { }
+pub trait Repr: Copy + Add<Self, Output=Self> { }
 
 impl Repr for u8 { }
 impl Repr for u16 { }
@@ -44,6 +45,16 @@ pub trait BoundedInteger: Copy + Eq + Ord + Hash {
 
     /// Returns the largest value that can be represented as Self.
     fn max_value() -> Self;
+
+    /// Checked integer addition.
+    fn checked_add(self, other: Self) -> Option<Self> {
+        self.checked_add_repr(other.to_repr())
+    }
+
+    /// Checked integer addition with representation.
+    fn checked_add_repr(self, other: Self::Repr) -> Option<Self> {
+        Self::from_repr(self.to_repr() + other)
+    }
 }
 
 pub mod bit;
