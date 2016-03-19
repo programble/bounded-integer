@@ -39,3 +39,4 @@ pub trait BoundedInteger: Copy + Eq + Ord {
 }
 
 pub mod bit;
+pub mod trit;
