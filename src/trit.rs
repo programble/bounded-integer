@@ -20,9 +20,10 @@ impl BoundedInteger for UTrit {
         }
     }
 
-    fn to_repr(self) -> u8 {
-        self as u8
-    }
+    fn to_repr(self) -> u8 { self as u8 }
+
+    fn min_value() -> Self { UTrit::U0 }
+    fn max_value() -> Self { UTrit::U2 }
 }
 
 /// A signed (balanced) trit.
@@ -47,7 +48,8 @@ impl BoundedInteger for STrit {
         }
     }
 
-    fn to_repr(self) -> i8 {
-        self as i8
-    }
+    fn to_repr(self) -> i8 { self as i8 }
+
+    fn min_value() -> Self { STrit::N1 }
+    fn max_value() -> Self { STrit::P1 }
 }

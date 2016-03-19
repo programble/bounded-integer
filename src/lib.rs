@@ -36,6 +36,12 @@ pub trait BoundedInteger: Copy + Eq + Ord {
 
     /// Converts from Self to representation.
     fn to_repr(self) -> Self::Repr;
+
+    /// Returns the smallest value that can be represented as Self.
+    fn min_value() -> Self;
+
+    /// Returns the largest value that can be represented as Self.
+    fn max_value() -> Self;
 }
 
 pub mod bit;

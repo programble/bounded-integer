@@ -19,7 +19,8 @@ impl BoundedInteger for Bit {
         }
     }
 
-    fn to_repr(self) -> u8 {
-        self as u8
-    }
+    fn to_repr(self) -> u8 { self as u8 }
+
+    fn min_value() -> Self { Bit::U0 }
+    fn max_value() -> Self { Bit::U1 }
 }
