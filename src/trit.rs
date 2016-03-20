@@ -5,7 +5,6 @@
 #[allow(missing_docs)]
 #[repr(u8)]
 pub enum UTrit { U0, U1, U2 }
-
 bounded_integer_impl!(UTrit, u8, UTrit::U0, UTrit::U2);
 
 /// A signed (balanced) trit.
@@ -17,6 +16,5 @@ pub enum STrit {
     U0 = 0,
     P1 = 1,
 }
-
 bounded_integer_impl!(STrit, i8, STrit::N1, STrit::P1);
 bounded_integer_partial_ord_impl!(STrit);
