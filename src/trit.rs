@@ -6,6 +6,8 @@
 #[repr(u8)]
 pub enum UTrit { U0, U1, U2 }
 bounded_integer_impl!(UTrit, u8, UTrit::U0, UTrit::U2);
+bounded_integer_add_self_impls!(UTrit);
+bounded_integer_add_repr_impls!(UTrit);
 
 /// A signed (balanced) trit.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Ord, Hash)]
@@ -18,3 +20,5 @@ pub enum STrit {
 }
 bounded_integer_impl!(STrit, i8, STrit::N1, STrit::P1);
 bounded_integer_partial_ord_impl!(STrit);
+bounded_integer_add_self_impls!(STrit);
+bounded_integer_add_repr_impls!(STrit);

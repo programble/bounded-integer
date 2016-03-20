@@ -6,6 +6,8 @@
 #[repr(u8)]
 pub enum Bit { U0, U1 }
 bounded_integer_impl!(Bit, u8, Bit::U0, Bit::U1);
+bounded_integer_add_self_impls!(Bit);
+bounded_integer_add_repr_impls!(Bit);
 
 #[cfg(test)]
 mod tests {

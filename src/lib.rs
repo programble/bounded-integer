@@ -134,6 +134,50 @@ macro_rules! bounded_integer_partial_ord_impl {
     }
 }
 
+macro_rules! bounded_integer_add_self_impls {
+    ($ty:ty) => {
+        impl ::std::ops::Add<$ty> for $ty {
+            type Output = Self;
+            fn add(self, rhs: Self) -> Self {
+                use $crate::BoundedInteger;
+                self.checked_add(rhs).expect("arithmetic operation overflowed")
+            }
+        }
+
+        impl<'a> ::std::ops::Add<&'a $ty> for $ty {
+            type Output = Self;
+            fn add(self, rhs: &Self) -> Self { self + *rhs }
+        }
+
+        impl<'a> ::std::ops::Add<$ty> for &'a $ty {
+            type Output = $ty;
+            fn add(self, rhs: $ty) -> $ty { *self + rhs }
+        }
+    }
+}
+
+macro_rules! bounded_integer_add_repr_impls {
+    ($ty:ty) => {
+        impl ::std::ops::Add<<$ty as $crate::BoundedInteger>::Repr> for $ty {
+            type Output = Self;
+            fn add(self, rhs: <$ty as $crate::BoundedInteger>::Repr) -> Self {
+                use $crate::BoundedInteger;
+                self.checked_add_repr(rhs).expect("arithmetic operation overflowed")
+            }
+        }
+
+        impl<'a> ::std::ops::Add<&'a <$ty as $crate::BoundedInteger>::Repr> for $ty {
+            type Output = Self;
+            fn add(self, rhs: &'a <$ty as $crate::BoundedInteger>::Repr) -> Self { self + *rhs }
+        }
+
+        impl<'a> ::std::ops::Add<<$ty as $crate::BoundedInteger>::Repr> for &'a $ty {
+            type Output = $ty;
+            fn add(self, rhs: <$ty as $crate::BoundedInteger>::Repr) -> $ty { *self + rhs }
+        }
+    }
+}
+
 pub mod repr;
 pub mod bit;
 pub mod trit;
