@@ -1,9 +1,5 @@
 //! Nibbles.
 
-use std::cmp::Ordering;
-
-use BoundedInteger;
-
 /// An unsigned nibble.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[allow(missing_docs)]
@@ -19,12 +15,7 @@ bounded_integer_impl!(UNibble, u8, UNibble::U0, UNibble::U15);
 pub enum SNibble { N8 = 248, N7, N6, N5, N4, N3, N2, N1, U0 = 0, P1, P2, P3, P4, P5, P6, P7 }
 
 bounded_integer_impl!(SNibble, i8, SNibble::N8, SNibble::P7);
-
-impl PartialOrd for SNibble {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        self.to_repr().partial_cmp(&other.to_repr())
-    }
-}
+bounded_integer_partial_ord_impl!(SNibble);
 
 /// A non-zero unsigned nibble.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]

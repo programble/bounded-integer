@@ -1,9 +1,5 @@
 //! Trits.
 
-use std::cmp::Ordering;
-
-use BoundedInteger;
-
 /// An unsigned trit.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[allow(missing_docs)]
@@ -23,9 +19,4 @@ pub enum STrit {
 }
 
 bounded_integer_impl!(STrit, i8, STrit::N1, STrit::P1);
-
-impl PartialOrd for STrit {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        self.to_repr().partial_cmp(&other.to_repr())
-    }
-}
+bounded_integer_partial_ord_impl!(STrit);

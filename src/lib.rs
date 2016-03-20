@@ -121,6 +121,17 @@ macro_rules! bounded_integer_impl {
     }
 }
 
+macro_rules! bounded_integer_partial_ord_impl {
+    ($ty:ty) => {
+        impl PartialOrd for $ty {
+            fn partial_cmp(&self, other: &Self) -> Option<::std::cmp::Ordering> {
+                use $crate::BoundedInteger;
+                self.to_repr().partial_cmp(&other.to_repr())
+            }
+        }
+    }
+}
+
 pub mod repr;
 pub mod bit;
 pub mod trit;
