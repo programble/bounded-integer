@@ -93,4 +93,32 @@ mod tests {
         assert_eq!(Bit::U0, Bit::U0.saturating_sub_repr(1));
         assert_eq!(Bit::U0, Bit::U1.saturating_sub_repr(2));
     }
+
+    #[test]
+    fn ops_add_self() {
+        assert_eq!(Bit::U1, Bit::U0 + Bit::U1);
+        assert_eq!(Bit::U1, Bit::U0 + &Bit::U1);
+        assert_eq!(Bit::U1, &Bit::U0 + Bit::U1);
+        assert_eq!(Bit::U1, &Bit::U0 + &Bit::U1);
+    }
+
+    #[test]
+    #[should_panic]
+    fn ops_add_self_overflow() {
+        let _ = Bit::U1 + Bit::U1;
+    }
+
+    #[test]
+    fn ops_add_repr() {
+        assert_eq!(Bit::U1, Bit::U0 + 1);
+        assert_eq!(Bit::U1, Bit::U0 + &1);
+        assert_eq!(Bit::U1, &Bit::U0 + 1);
+        assert_eq!(Bit::U1, &Bit::U0 + &1);
+    }
+
+    #[test]
+    #[should_panic]
+    fn ops_add_repr_overflow() {
+        let _ = Bit::U1 + 1;
+    }
 }
