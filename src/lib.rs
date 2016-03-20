@@ -13,7 +13,7 @@
     variant_size_differences,
 )]
 
-use repr::Repr;
+pub use repr::Repr;
 
 /// Bounded integer.
 pub trait BoundedInteger: Copy + Eq + Ord {
@@ -210,7 +210,4 @@ macro_rules! bounded_integer_add_repr_impls {
     }
 }
 
-pub mod repr;
-pub mod bit;
-pub mod trit;
-pub mod nibble;
+mod repr;
