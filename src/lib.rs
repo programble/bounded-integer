@@ -13,12 +13,10 @@
     variant_size_differences,
 )]
 
-use std::hash::Hash;
-
 use repr::Repr;
 
 /// Bounded integer.
-pub trait BoundedInteger: Copy + Eq + Ord + Hash {
+pub trait BoundedInteger: Copy + Eq + Ord {
     /// Integer representation.
     type Repr: Repr;
 
