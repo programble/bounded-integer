@@ -1,11 +1,11 @@
 //! Integer representations.
 
-use std::ops::Add;
+use std::ops::{Add, Sub};
 
 /// Integer representation.
 ///
 /// Should not be implemented for any new types.
-pub trait Repr: Copy + Eq + Ord + Add<Self, Output=Self> {
+pub trait Repr: Copy + Eq + Ord + Add<Self, Output=Self> + Sub<Self, Output=Self> {
     /// Returns true if negative.
     fn is_negative(self) -> bool { false }
 }
