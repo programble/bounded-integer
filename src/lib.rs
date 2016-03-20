@@ -44,6 +44,16 @@ pub trait BoundedInteger: Copy + Eq + Ord + Hash {
         Self::from_repr(self.to_repr() + other)
     }
 
+    /// Checked integer subtraction.
+    fn checked_sub(self, other: Self) -> Option<Self> {
+        self.checked_sub_repr(other.to_repr())
+    }
+
+    /// Checked integer subtraction with representation.
+    fn checked_sub_repr(self, other: Self::Repr) -> Option<Self> {
+        Self::from_repr(self.to_repr() + other)
+    }
+
     /// Saturating integer addition.
     fn saturating_add(self, other: Self) -> Self {
         self.saturating_add_repr(other.to_repr())
@@ -55,6 +65,20 @@ pub trait BoundedInteger: Copy + Eq + Ord + Hash {
             self.checked_add_repr(other).unwrap_or(Self::min_value())
         } else {
             self.checked_add_repr(other).unwrap_or(Self::max_value())
+        }
+    }
+
+    /// Saturating integer subtraction.
+    fn saturating_sub(self, other: Self) -> Self {
+        self.saturating_sub_repr(other.to_repr())
+    }
+
+    /// Saturating integer subtraction with representation.
+    fn saturating_sub_repr(self, other: Self::Repr) -> Self {
+        if other.is_negative() {
+            self.checked_sub_repr(other).unwrap_or(Self::max_value())
+        } else {
+            self.checked_sub_repr(other).unwrap_or(Self::min_value())
         }
     }
 }
