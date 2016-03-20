@@ -14,31 +14,8 @@
 )]
 
 use std::hash::Hash;
-use std::ops::Add;
 
-/// Trait for integer representations.
-pub trait Repr: Copy + Eq + Ord + Add<Self, Output=Self> {
-    /// Returns true if negative.
-    fn is_negative(self) -> bool { false }
-}
-
-impl Repr for u8 { }
-impl Repr for u16 { }
-impl Repr for u32 { }
-impl Repr for u64 { }
-
-impl Repr for i8 {
-    fn is_negative(self) -> bool { self.is_negative() }
-}
-impl Repr for i16 {
-    fn is_negative(self) -> bool { self.is_negative() }
-}
-impl Repr for i32 {
-    fn is_negative(self) -> bool { self.is_negative() }
-}
-impl Repr for i64 {
-    fn is_negative(self) -> bool { self.is_negative() }
-}
+use repr::Repr;
 
 /// Bounded integer.
 pub trait BoundedInteger: Copy + Eq + Ord + Hash {
@@ -82,5 +59,6 @@ pub trait BoundedInteger: Copy + Eq + Ord + Hash {
     }
 }
 
+pub mod repr;
 pub mod bit;
 pub mod trit;
