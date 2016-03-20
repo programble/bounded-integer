@@ -1,29 +1,45 @@
 //! Integer representations.
 
-use std::ops::{Add, Sub};
-
 /// Integer representation.
 ///
 /// Should not be implemented for any new types.
-pub trait Repr: Copy + Eq + Ord + Add<Self, Output=Self> + Sub<Self, Output=Self> {
+pub trait Repr: Copy + Eq + Ord {
     /// Returns true if negative.
-    fn is_negative(self) -> bool { false }
+    ///
+    /// Used to determine to which bound operations should saturate.
+    fn is_negative(self) -> bool;
+
+    /// Checked integer addition.
+    fn checked_add(self, other: Self) -> Option<Self>;
+
+    /// Checked integer subtraction.
+    fn checked_sub(self, other: Self) -> Option<Self>;
 }
 
-impl Repr for u8 { }
-impl Repr for u16 { }
-impl Repr for u32 { }
-impl Repr for u64 { }
+macro_rules! impl_unsigned {
+    ($ty:ty) => {
+        impl Repr for $ty {
+            fn is_negative(self) -> bool { false }
+            fn checked_add(self, other: Self) -> Option<Self> { self.checked_add(other) }
+            fn checked_sub(self, other: Self) -> Option<Self> { self.checked_sub(other) }
+        }
+    }
+}
 
 macro_rules! impl_signed {
     ($ty:ty) => {
         impl Repr for $ty {
-            fn is_negative(self) -> bool {
-                self.is_negative()
-            }
+            fn is_negative(self) -> bool { self.is_negative() }
+            fn checked_add(self, other: Self) -> Option<Self> { self.checked_add(other) }
+            fn checked_sub(self, other: Self) -> Option<Self> { self.checked_sub(other) }
         }
     }
 }
+
+impl_unsigned!(u8);
+impl_unsigned!(u16);
+impl_unsigned!(u32);
+impl_unsigned!(u64);
 
 impl_signed!(i8);
 impl_signed!(i16);

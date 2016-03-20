@@ -41,7 +41,7 @@ pub trait BoundedInteger: Copy + Eq + Ord + Hash {
 
     /// Checked integer addition with representation.
     fn checked_add_repr(self, other: Self::Repr) -> Option<Self> {
-        Self::from_repr(self.to_repr() + other)
+        self.to_repr().checked_add(other).and_then(Self::from_repr)
     }
 
     /// Checked integer subtraction.
@@ -51,7 +51,7 @@ pub trait BoundedInteger: Copy + Eq + Ord + Hash {
 
     /// Checked integer subtraction with representation.
     fn checked_sub_repr(self, other: Self::Repr) -> Option<Self> {
-        Self::from_repr(self.to_repr() - other)
+        self.to_repr().checked_sub(other).and_then(Self::from_repr)
     }
 
     /// Saturating integer addition.
