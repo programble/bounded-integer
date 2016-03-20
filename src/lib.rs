@@ -153,6 +153,11 @@ macro_rules! bounded_integer_add_self_impls {
             type Output = $ty;
             fn add(self, rhs: $ty) -> $ty { *self + rhs }
         }
+
+        impl<'a, 'b> ::std::ops::Add<&'b $ty> for &'a $ty {
+            type Output = $ty;
+            fn add(self, rhs: &$ty) -> $ty { *self + *rhs }
+        }
     }
 }
 
@@ -174,6 +179,11 @@ macro_rules! bounded_integer_add_repr_impls {
         impl<'a> ::std::ops::Add<<$ty as $crate::BoundedInteger>::Repr> for &'a $ty {
             type Output = $ty;
             fn add(self, rhs: <$ty as $crate::BoundedInteger>::Repr) -> $ty { *self + rhs }
+        }
+
+        impl<'a, 'b> ::std::ops::Add<&'b <$ty as $crate::BoundedInteger>::Repr> for &'a $ty {
+            type Output = $ty;
+            fn add(self, rhs: &<$ty as $crate::BoundedInteger>::Repr) -> $ty { *self + *rhs }
         }
     }
 }
