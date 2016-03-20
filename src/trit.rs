@@ -10,7 +10,7 @@ use BoundedInteger;
 #[repr(u8)]
 pub enum UTrit { U0, U1, U2 }
 
-bounded_integer_impl!(UTrit, u8, UTrit::U0 = 0, UTrit::U2 = 2);
+bounded_integer_impl!(UTrit, u8, UTrit::U0, UTrit::U2);
 
 /// A signed (balanced) trit.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Ord, Hash)]
@@ -22,7 +22,7 @@ pub enum STrit {
     P1 = 1,
 }
 
-bounded_integer_impl!(STrit, i8, STrit::N1 = -1, STrit::P1 = 1);
+bounded_integer_impl!(STrit, i8, STrit::N1, STrit::P1);
 
 impl PartialOrd for STrit {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {

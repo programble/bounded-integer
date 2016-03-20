@@ -84,14 +84,14 @@ pub trait BoundedInteger: Copy + Eq + Ord + Hash {
 }
 
 macro_rules! bounded_integer_impl {
-    ($ty:ty, $repr:ty, $minv:path = $minr:expr, $maxv:path = $maxr:expr) => {
+    ($ty:ty, $repr:ty, $min:path, $max:path) => {
         impl $crate::BoundedInteger for $ty {
             type Repr = $repr;
 
             #[allow(unused_comparisons)]
             fn from_repr(repr: $repr) -> Option<Self> {
                 use std::mem;
-                if repr >= $minr && repr <= $maxr {
+                if repr >= $min as $repr && repr <= $max as $repr {
                     Some(unsafe { mem::transmute(repr) })
                 } else {
                     None
@@ -100,8 +100,8 @@ macro_rules! bounded_integer_impl {
 
             fn to_repr(self) -> $repr { self as $repr }
 
-            fn min_value() -> Self { $minv }
-            fn max_value() -> Self { $maxv }
+            fn min_value() -> Self { $min }
+            fn max_value() -> Self { $max }
         }
     }
 }
