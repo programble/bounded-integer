@@ -134,6 +134,17 @@ macro_rules! bounded_integer_partial_ord_impl {
     }
 }
 
+/// Implements `std::ops::Add` for a `BoundedInteger` enum with `Self`.
+///
+/// Implements the following combinations. The `Output` is always `Self`.
+///
+/// - `Self + Self`
+/// - `Self + &Self`
+/// - `&Self + Self`
+/// - `&Self + &Self`
+///
+/// The implementations always panic on overflow.
+#[macro_export]
 macro_rules! bounded_integer_add_self_impls {
     ($ty:ty) => {
         impl ::std::ops::Add<$ty> for $ty {
@@ -161,6 +172,17 @@ macro_rules! bounded_integer_add_self_impls {
     }
 }
 
+/// Implements `std::ops::Add` for a `BoundedInteger` enum with `Self::Repr`.
+///
+/// Implements the following combinations. The `Output` is always `Self`.
+///
+/// - `Self + Self::Repr`
+/// - `Self + &Self::Repr`
+/// - `&Self + Self::Repr`
+/// - `&Self + &Self::Repr`
+///
+/// The implementations always panic on overflow.
+#[macro_export]
 macro_rules! bounded_integer_add_repr_impls {
     ($ty:ty) => {
         impl ::std::ops::Add<<$ty as $crate::BoundedInteger>::Repr> for $ty {
