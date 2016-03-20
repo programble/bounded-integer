@@ -121,6 +121,10 @@ macro_rules! bounded_integer_impl {
     }
 }
 
+/// Implements `PartialOrd` for a `BoundedInteger` enum.
+///
+/// Only necessary for signed bounded integers. Otherwise, `PartialOrd` can be derived.
+#[macro_export]
 macro_rules! bounded_integer_partial_ord_impl {
     ($ty:ty) => {
         impl PartialOrd for $ty {
