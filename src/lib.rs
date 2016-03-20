@@ -86,3 +86,4 @@ pub trait BoundedInteger: Copy + Eq + Ord + Hash {
 pub mod repr;
 pub mod bit;
 pub mod trit;
+pub mod nibble;
