@@ -1,5 +1,7 @@
 //! Trits.
 
+use std::cmp::Ordering;
+
 use BoundedInteger;
 
 /// An unsigned trit.
@@ -27,7 +29,7 @@ impl BoundedInteger for UTrit {
 }
 
 /// A signed (balanced) trit.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Ord, Hash)]
 #[allow(missing_docs)]
 #[repr(u8)]
 pub enum STrit {
@@ -52,4 +54,10 @@ impl BoundedInteger for STrit {
 
     fn min_value() -> Self { STrit::N1 }
     fn max_value() -> Self { STrit::P1 }
+}
+
+impl PartialOrd for STrit {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        self.to_repr().partial_cmp(&other.to_repr())
+    }
 }
