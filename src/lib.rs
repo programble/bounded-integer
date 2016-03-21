@@ -53,6 +53,16 @@ pub trait BoundedInteger: Copy + Eq + Ord {
         self.to_repr().checked_sub(other).and_then(Self::from_repr)
     }
 
+    /// Checked integer multiplication.
+    fn checked_mul(self, other: Self) -> Option<Self> {
+        self.checked_mul_repr(other.to_repr())
+    }
+
+    /// Checked integer multiplication with representation.
+    fn checked_mul_repr(self, other: Self::Repr) -> Option<Self> {
+        self.to_repr().checked_mul(other).and_then(Self::from_repr)
+    }
+
     /// Saturating integer addition.
     fn saturating_add(self, other: Self) -> Self {
         self.saturating_add_repr(other.to_repr())
@@ -78,6 +88,20 @@ pub trait BoundedInteger: Copy + Eq + Ord {
             self.checked_sub_repr(other).unwrap_or(Self::max_value())
         } else {
             self.checked_sub_repr(other).unwrap_or(Self::min_value())
+        }
+    }
+
+    /// Saturating integer multiplication.
+    fn saturating_mul(self, other: Self) -> Self {
+        self.saturating_mul_repr(other.to_repr())
+    }
+
+    /// Saturating integer multiplication with representation.
+    fn saturating_mul_repr(self, other: Self::Repr) -> Self {
+        if other.is_negative() {
+            self.checked_mul_repr(other).unwrap_or(Self::min_value())
+        } else {
+            self.checked_mul_repr(other).unwrap_or(Self::max_value())
         }
     }
 }
