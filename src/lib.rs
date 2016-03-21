@@ -323,3 +323,41 @@ macro_rules! bounded_integer_sub_repr_impls {
         }
     }
 }
+
+/// Implements `std::ops::Mul` for a `BoundedInteger` enum with `Self`.
+///
+/// Implements the following combinations. The `Output` is always `Self`.
+///
+/// - `Self * Self`
+/// - `Self * &Self`
+/// - `&Self * Self`
+/// - `&Self * &Self`
+///
+/// The implementations always panic on overflow.
+#[macro_export]
+macro_rules! bounded_integer_mul_self_impls {
+    ($ty:ty) => {
+        impl ::std::ops::Mul<$ty> for $ty {
+            type Output = Self;
+            fn mul(self, rhs: Self) -> Self {
+                use $crate::BoundedInteger;
+                self.checked_mul(rhs).expect("arithmetic operation overflowed")
+            }
+        }
+
+        impl<'a> ::std::ops::Mul<&'a $ty> for $ty {
+            type Output = Self;
+            fn mul(self, rhs: &Self) -> Self { self * *rhs }
+        }
+
+        impl<'a> ::std::ops::Mul<$ty> for &'a $ty {
+            type Output = $ty;
+            fn mul(self, rhs: $ty) -> $ty { *self * rhs }
+        }
+
+        impl<'a, 'b> ::std::ops::Mul<&'b $ty> for &'a $ty {
+            type Output = $ty;
+            fn mul(self, rhs: &$ty) -> $ty { *self * *rhs }
+        }
+    }
+}
