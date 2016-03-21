@@ -98,10 +98,10 @@ pub trait BoundedInteger: Copy + Eq + Ord {
 
     /// Saturating integer multiplication with representation.
     fn saturating_mul_repr(self, other: Self::Repr) -> Self {
-        if other.is_negative() {
-            self.checked_mul_repr(other).unwrap_or(Self::min_value())
-        } else {
+        if self.to_repr().is_negative() == other.is_negative() {
             self.checked_mul_repr(other).unwrap_or(Self::max_value())
+        } else {
+            self.checked_mul_repr(other).unwrap_or(Self::min_value())
         }
     }
 }
