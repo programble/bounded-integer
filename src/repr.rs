@@ -14,6 +14,9 @@ pub trait Repr: Copy + Eq + Ord {
 
     /// Checked integer subtraction.
     fn checked_sub(self, other: Self) -> Option<Self>;
+
+    /// Checked integer multiplication.
+    fn checked_mul(self, other: Self) -> Option<Self>;
 }
 
 macro_rules! impl_unsigned {
@@ -22,6 +25,7 @@ macro_rules! impl_unsigned {
             fn is_negative(self) -> bool { false }
             fn checked_add(self, other: Self) -> Option<Self> { self.checked_add(other) }
             fn checked_sub(self, other: Self) -> Option<Self> { self.checked_sub(other) }
+            fn checked_mul(self, other: Self) -> Option<Self> { self.checked_mul(other) }
         }
     }
 }
@@ -32,6 +36,7 @@ macro_rules! impl_signed {
             fn is_negative(self) -> bool { self.is_negative() }
             fn checked_add(self, other: Self) -> Option<Self> { self.checked_add(other) }
             fn checked_sub(self, other: Self) -> Option<Self> { self.checked_sub(other) }
+            fn checked_mul(self, other: Self) -> Option<Self> { self.checked_mul(other) }
         }
     }
 }
