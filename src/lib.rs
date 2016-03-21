@@ -250,7 +250,7 @@ macro_rules! bounded_integer_add_repr_impls {
 
 /// Implements `std::ops::Sub` for a `BoundedInteger` enum with `Self`.
 ///
-/// Implements the following combinations. The `Output`` is always `Self`.
+/// Implements the following combinations. The `Output` is always `Self`.
 ///
 /// - `Self - Self`
 /// - `Self - &Self`
