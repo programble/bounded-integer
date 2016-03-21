@@ -135,6 +135,19 @@ macro_rules! bounded_integer_partial_ord_impl {
     }
 }
 
+/// Implements `Into<Self::Repr` for a `BoundedInteger` enum.
+#[macro_export]
+macro_rules! bounded_integer_into_repr_impl {
+    ($ty:ty) => {
+        impl Into<<$ty as $crate::BoundedInteger>::Repr> for $ty {
+            fn into(self) -> <$ty as $crate::BoundedInteger>::Repr {
+                use $crate::BoundedInteger;
+                self.to_repr()
+            }
+        }
+    }
+}
+
 /// Implements `std::ops::Add` for a `BoundedInteger` enum with `Self`.
 ///
 /// Implements the following combinations. The `Output` is always `Self`.
