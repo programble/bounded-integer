@@ -14,6 +14,7 @@
 )]
 
 pub use repr::Repr;
+mod repr;
 
 /// Bounded integer.
 pub trait BoundedInteger: Copy + Eq + Ord {
@@ -210,4 +211,78 @@ macro_rules! bounded_integer_add_repr_impls {
     }
 }
 
-mod repr;
+/// Implements `std::ops::Sub` for a `BoundedInteger` enum with `Self`.
+///
+/// Implements the following combinations. The `Output`` is always `Self`.
+///
+/// - `Self - Self`
+/// - `Self - &Self`
+/// - `&Self - Self`
+/// - `&Self - &Self`
+///
+/// The implementations always panic on overflow.
+#[macro_export]
+macro_rules! bounded_integer_sub_self_impls {
+    ($ty:ty) => {
+        impl ::std::ops::Sub<$ty> for $ty {
+            type Output = Self;
+            fn sub(self, rhs: Self) -> Self {
+                use $crate::BoundedInteger;
+                self.checked_sub(rhs).expect("arithmetic operation overflowed")
+            }
+        }
+
+        impl<'a> ::std::ops::Sub<&'a $ty> for $ty {
+            type Output = Self;
+            fn sub(self, rhs: &Self) -> Self { self - *rhs }
+        }
+
+        impl<'a> ::std::ops::Sub<$ty> for &'a $ty {
+            type Output = $ty;
+            fn sub(self, rhs: $ty) -> $ty { *self - rhs }
+        }
+
+        impl<'a, 'b> ::std::ops::Sub<&'b $ty> for &'a $ty {
+            type Output = $ty;
+            fn sub(self, rhs: &$ty) -> $ty { *self - *rhs }
+        }
+    }
+}
+
+/// Implements `std::ops::Sub` for a `BoundedInteger` enum with `Self::Repr`.
+///
+/// Implements the following combinations. The `Output` is always `Self`.
+///
+/// - `Self - Self::Repr`
+/// - `Self - &Self::Repr`
+/// - `&Self - Self::Repr`
+/// - `&Self - &Self::Repr`
+///
+/// The implementations always panic on overflow.
+#[macro_export]
+macro_rules! bounded_integer_sub_repr_impls {
+    ($ty:ty) => {
+        impl ::std::ops::Sub<<$ty as $crate::BoundedInteger>::Repr> for $ty {
+            type Output = Self;
+            fn sub(self, rhs: <$ty as $crate::BoundedInteger>::Repr) -> Self {
+                use $crate::BoundedInteger;
+                self.checked_sub_repr(rhs).expect("arithmetic operation overflowed")
+            }
+        }
+
+        impl<'a> ::std::ops::Sub<&'a <$ty as $crate::BoundedInteger>::Repr> for $ty {
+            type Output = Self;
+            fn sub(self, rhs: &'a <$ty as $crate::BoundedInteger>::Repr) -> Self { self - *rhs }
+        }
+
+        impl<'a> ::std::ops::Sub<<$ty as $crate::BoundedInteger>::Repr> for &'a $ty {
+            type Output = $ty;
+            fn sub(self, rhs: <$ty as $crate::BoundedInteger>::Repr) -> $ty { *self - rhs }
+        }
+
+        impl<'a, 'b> ::std::ops::Sub<&'b <$ty as $crate::BoundedInteger>::Repr> for &'a $ty {
+            type Output = $ty;
+            fn sub(self, rhs: &<$ty as $crate::BoundedInteger>::Repr) -> $ty { *self - *rhs }
+        }
+    }
+}
