@@ -485,3 +485,44 @@ macro_rules! bounded_integer_div_repr_impls {
         }
     }
 }
+
+/// Implements all bounded integer traits for an enum.
+///
+/// - `BoundedInteger`
+/// - `Into<Self::Repr>`
+/// - `Add<Self>`
+/// - `Add<Self::Repr>`
+/// - `Sub<Self>`
+/// - `Sub<Self::Repr>`
+/// - `Mul<Self>`
+/// - `Mul<Self::Repr>`
+/// - `Div<Self>`
+/// - `Div<Self::Repr>`
+///
+/// # Examples
+///
+/// ```
+/// #[macro_use]
+/// extern crate bounded_integer;
+///
+/// #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+/// #[repr(u8)]
+/// enum TwoBit { U0, U1, U2, U3 }
+/// bounded_integer_impls!(TwoBit, u8, TwoBit::U0, TwoBit::U3);
+/// # fn main() { }
+/// ```
+#[macro_export]
+macro_rules! bounded_integer_impls {
+    ($ty:ty, $repr:ty, $min:path, $max:path) => {
+        bounded_integer_impl!($ty, $repr, $min, $max);
+        bounded_integer_into_repr_impl!($ty);
+        bounded_integer_add_self_impls!($ty);
+        bounded_integer_add_repr_impls!($ty);
+        bounded_integer_sub_self_impls!($ty);
+        bounded_integer_sub_repr_impls!($ty);
+        bounded_integer_mul_self_impls!($ty);
+        bounded_integer_mul_repr_impls!($ty);
+        bounded_integer_div_self_impls!($ty);
+        bounded_integer_div_repr_impls!($ty);
+    }
+}
