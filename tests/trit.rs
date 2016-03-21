@@ -15,6 +15,8 @@ bounded_integer_impl!(Trit, i8, Trit::N1, Trit::P1);
 bounded_integer_partial_ord_impl!(Trit);
 bounded_integer_add_self_impls!(Trit);
 bounded_integer_add_repr_impls!(Trit);
+bounded_integer_sub_self_impls!(Trit);
+bounded_integer_sub_repr_impls!(Trit);
 
 #[test]
 fn from_repr() {
@@ -120,4 +122,32 @@ fn ops_add_repr() {
 #[should_panic]
 fn ops_add_repr_overflow() {
     let _ = Trit::P1 + 1;
+}
+
+#[test]
+fn ops_sub_self() {
+    assert_eq!(Trit::U0, Trit::P1 - Trit::P1);
+    assert_eq!(Trit::U0, Trit::P1 - &Trit::P1);
+    assert_eq!(Trit::U0, &Trit::P1 - Trit::P1);
+    assert_eq!(Trit::U0, &Trit::P1 - &Trit::P1);
+}
+
+#[test]
+#[should_panic]
+fn ops_sub_self_overflow() {
+    let _ = Trit::N1 - Trit::P1;
+}
+
+#[test]
+fn ops_sub_repr() {
+    assert_eq!(Trit::U0, Trit::P1 - 1);
+    assert_eq!(Trit::U0, Trit::P1 - &1);
+    assert_eq!(Trit::U0, &Trit::P1 - 1);
+    assert_eq!(Trit::U0, &Trit::P1 - &1);
+}
+
+#[test]
+#[should_panic]
+fn ops_sub_repr_overflow() {
+    let _ = Trit::N1 - 1;
 }
