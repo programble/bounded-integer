@@ -12,6 +12,7 @@ enum Nibble {
 
 bounded_integer_impl!(Nibble, i8, Nibble::N8, Nibble::P7);
 bounded_integer_partial_ord_impl!(Nibble);
+bounded_integer_mul_self_impls!(Nibble);
 
 #[test]
 fn checked_mul() {
@@ -43,4 +44,18 @@ fn saturating_mul_repr() {
     assert_eq!(Nibble::P7, Nibble::N4.saturating_mul_repr(-2));
     assert_eq!(Nibble::N8, Nibble::N8.saturating_mul_repr(2));
     assert_eq!(Nibble::N8, Nibble::P2.saturating_mul_repr(-8));
+}
+
+#[test]
+fn ops_mul_self() {
+    assert_eq!(Nibble::P4, Nibble::P2 * Nibble::P2);
+    assert_eq!(Nibble::P4, Nibble::P2 * &Nibble::P2);
+    assert_eq!(Nibble::P4, &Nibble::P2 * Nibble::P2);
+    assert_eq!(Nibble::P4, &Nibble::P2 * &Nibble::P2);
+}
+
+#[test]
+#[should_panic]
+fn ops_mul_self_overflow() {
+    let _ = Nibble::P4 * Nibble::P4;
 }
