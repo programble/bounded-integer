@@ -13,6 +13,7 @@ enum Trit {
 
 bounded_integer_impl!(Trit, i8, Trit::N1, Trit::P1);
 bounded_integer_partial_ord_impl!(Trit);
+bounded_integer_into_repr_impl!(Trit);
 bounded_integer_add_self_impls!(Trit);
 bounded_integer_add_repr_impls!(Trit);
 bounded_integer_sub_self_impls!(Trit);
@@ -94,6 +95,11 @@ fn saturating_sub() {
 fn saturating_sub_repr() {
     assert_eq!(Trit::N1, Trit::U0.saturating_sub_repr(2));
     assert_eq!(Trit::P1, Trit::U0.saturating_sub_repr(-2));
+}
+
+#[test]
+fn into() {
+    assert_eq!(1i8, Trit::P1.into());
 }
 
 #[test]
