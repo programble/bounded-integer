@@ -18,6 +18,9 @@ pub trait Repr: Copy + Eq + Ord {
 
     /// Checked integer division.
     fn checked_div(self, other: Self) -> Option<Self>;
+
+    /// Checked integer remainder.
+    fn checked_rem(self, other: Self) -> Option<Self>;
 }
 
 macro_rules! impl_unsigned {
@@ -28,6 +31,7 @@ macro_rules! impl_unsigned {
             fn checked_sub(self, other: Self) -> Option<Self> { self.checked_sub(other) }
             fn checked_mul(self, other: Self) -> Option<Self> { self.checked_mul(other) }
             fn checked_div(self, other: Self) -> Option<Self> { self.checked_div(other) }
+            fn checked_rem(self, other: Self) -> Option<Self> { self.checked_rem(other) }
         }
     }
 }
@@ -40,6 +44,7 @@ macro_rules! impl_signed {
             fn checked_sub(self, other: Self) -> Option<Self> { self.checked_sub(other) }
             fn checked_mul(self, other: Self) -> Option<Self> { self.checked_mul(other) }
             fn checked_div(self, other: Self) -> Option<Self> { self.checked_div(other) }
+            fn checked_rem(self, other: Self) -> Option<Self> { self.checked_rem(other) }
         }
     }
 }
