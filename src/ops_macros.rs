@@ -301,3 +301,79 @@ macro_rules! bounded_integer_div_repr_impls {
         }
     }
 }
+
+/// Implements `std::ops::Rem` for a `BoundedInteger` enum with `Self`.
+///
+/// Implements the following combinations. The `Output` is always `Self`.
+///
+/// - `Self / Self`
+/// - `Self / &Self`
+/// - `&Self / Self`
+/// - `&Self / &Self`
+///
+/// The implementations always panic on overflow.
+#[macro_export]
+macro_rules! bounded_integer_rem_self_impls {
+    ($ty:ty) => {
+        impl ::std::ops::Rem<$ty> for $ty {
+            type Output = Self;
+            fn rem(self, rhs: Self) -> Self {
+                use $crate::BoundedInteger;
+                self.checked_rem(rhs).expect("arithmetic operation overflowed")
+            }
+        }
+
+        impl<'a> ::std::ops::Rem<&'a $ty> for $ty {
+            type Output = Self;
+            fn rem(self, rhs: &Self) -> Self { self % *rhs }
+        }
+
+        impl<'a> ::std::ops::Rem<$ty> for &'a $ty {
+            type Output = $ty;
+            fn rem(self, rhs: $ty) -> $ty { *self % rhs }
+        }
+
+        impl<'a, 'b> ::std::ops::Rem<&'b $ty> for &'a $ty {
+            type Output = $ty;
+            fn rem(self, rhs: &$ty) -> $ty { *self % *rhs }
+        }
+    }
+}
+
+/// Implements `std::ops::Rem` for a `BoundedInteger` enum with `Self::Repr`.
+///
+/// Implements the following combinations. The `Output` is always `Self`.
+///
+/// - `Self / Self::Repr`
+/// - `Self / &Self::Repr`
+/// - `&Self / Self::Repr`
+/// - `&Self / &Self::Repr`
+///
+/// The implementations always panic on overflow.
+#[macro_export]
+macro_rules! bounded_integer_rem_repr_impls {
+    ($ty:ty) => {
+        impl ::std::ops::Rem<<$ty as $crate::BoundedInteger>::Repr> for $ty {
+            type Output = Self;
+            fn rem(self, rhs: <$ty as $crate::BoundedInteger>::Repr) -> Self {
+                use $crate::BoundedInteger;
+                self.checked_rem_repr(rhs).expect("arithmetic operation overflowed")
+            }
+        }
+
+        impl<'a> ::std::ops::Rem<&'a <$ty as $crate::BoundedInteger>::Repr> for $ty {
+            type Output = Self;
+            fn rem(self, rhs: &'a <$ty as $crate::BoundedInteger>::Repr) -> Self { self % *rhs }
+        }
+
+        impl<'a> ::std::ops::Rem<<$ty as $crate::BoundedInteger>::Repr> for &'a $ty {
+            type Output = $ty;
+            fn rem(self, rhs: <$ty as $crate::BoundedInteger>::Repr) -> $ty { *self % rhs }
+        }
+
+        impl<'a, 'b> ::std::ops::Rem<&'b <$ty as $crate::BoundedInteger>::Repr> for &'a $ty {
+            type Output = $ty;
+            fn rem(self, rhs: &<$ty as $crate::BoundedInteger>::Repr) -> $ty { *self % *rhs }
+        }
+    }
+}

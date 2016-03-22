@@ -230,6 +230,8 @@ macro_rules! bounded_integer_impls {
         bounded_integer_mul_repr_impls!($ty);
         bounded_integer_div_self_impls!($ty);
         bounded_integer_div_repr_impls!($ty);
+        bounded_integer_rem_self_impls!($ty);
+        bounded_integer_rem_repr_impls!($ty);
     }
 }
 
