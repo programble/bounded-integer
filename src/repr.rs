@@ -1,5 +1,3 @@
-//! Integer representations.
-
 /// Integer representation.
 ///
 /// Should not be implemented for any new types.
