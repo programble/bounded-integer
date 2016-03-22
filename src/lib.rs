@@ -73,6 +73,16 @@ pub trait BoundedInteger: Copy + Eq + Ord {
         self.to_repr().checked_div(other).and_then(Self::from_repr)
     }
 
+    /// Checked integer remainder.
+    fn checked_rem(self, other: Self) -> Option<Self> {
+        self.checked_rem_repr(other.to_repr())
+    }
+
+    /// Checked integer remainder with representation.
+    fn checked_rem_repr(self, other: Self::Repr) -> Option<Self> {
+        self.to_repr().checked_rem(other).and_then(Self::from_repr)
+    }
+
     /// Saturating integer addition.
     fn saturating_add(self, other: Self) -> Self {
         self.saturating_add_repr(other.to_repr())
