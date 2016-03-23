@@ -11,3 +11,27 @@ enum Nibble {
 }
 bounded_integer_impls!(Nibble, i8, Nibble::N8, Nibble::P7);
 bounded_integer_partial_ord_impl!(Nibble);
+
+#[test]
+fn from_repr() {
+    assert_eq!(Some(Nibble::U0), Nibble::from_repr(0i8));
+    assert_eq!(Some(Nibble::N8), Nibble::from_repr(-8i8));
+    assert_eq!(Some(Nibble::P7), Nibble::from_repr(7i8));
+}
+
+#[test]
+fn to_repr() {
+    assert_eq!(0i8, Nibble::U0.to_repr());
+    assert_eq!(-8i8, Nibble::N8.to_repr());
+    assert_eq!(7i8, Nibble::P7.to_repr());
+}
+
+#[test]
+fn min_value() {
+    assert_eq!(Nibble::N8, Nibble::min_value());
+}
+
+#[test]
+fn max_value() {
+    assert_eq!(Nibble::P7, Nibble::max_value());
+}
