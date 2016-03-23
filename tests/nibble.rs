@@ -71,3 +71,11 @@ fn checked_mul() {
     assert_eq!(None, SNibble::N2.checked_mul(SNibble::N4));
     assert_eq!(None, SNibble::N3.checked_mul(SNibble::P3));
 }
+
+#[test]
+fn checked_div() {
+    assert_eq!(Some(SNibble::P2), SNibble::P6.checked_div(SNibble::P3));
+    assert_eq!(Some(SNibble::P2), SNibble::N6.checked_div(SNibble::N3));
+    assert_eq!(Some(SNibble::N2), SNibble::N6.checked_div(SNibble::P3));
+    assert_eq!(None, NZUNibble::U1.checked_div(NZUNibble::U2));
+}
