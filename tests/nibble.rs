@@ -12,6 +12,14 @@ enum SNibble {
 bounded_integer_impls!(SNibble, i8, SNibble::N8, SNibble::P7);
 bounded_integer_partial_ord_impl!(SNibble);
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[allow(dead_code)]
+#[repr(u8)]
+enum NZUNibble {
+    U1 = 1, U2, U3, U4, U5, U6, U7, U8, U9, U10, U11, U12, U13, U14, U15
+}
+bounded_integer_impls!(NZUNibble, u8, NZUNibble::U1, NZUNibble::U15);
+
 #[test]
 fn from_repr() {
     assert_eq!(Some(SNibble::U0), SNibble::from_repr(0i8));
