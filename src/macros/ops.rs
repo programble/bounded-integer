@@ -399,7 +399,7 @@ macro_rules! bounded_integer_neg_impls {
 
         impl<'a> ::std::ops::Neg for &'a $ty {
             type Output = $ty;
-            fn neg(self) -> Self {
+            fn neg(self) -> $ty {
                 -*self
             }
         }
