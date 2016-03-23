@@ -377,3 +377,31 @@ macro_rules! bounded_integer_rem_repr_impls {
         }
     }
 }
+
+/// Implements `std::ops::Neg` for a `BoundedInteger` enum.
+///
+/// Implements the following. The `Output` is always `Self`.
+///
+/// - `-Self`
+/// - `-&Self`
+///
+/// The implementations always panic on overflow.
+#[macro_export]
+macro_rules! bounded_integer_neg_impls {
+    ($ty:ty) => {
+        impl ::std::ops::Neg for $ty {
+            type Output = Self;
+            fn neg(self) -> Self {
+                use $crate::BoundedInteger;
+                self.checked_neg().expect("arithmetic operation overflowed")
+            }
+        }
+
+        impl<'a> ::std::ops::Neg for &'a $ty {
+            type Output = $ty;
+            fn neg(self) -> Self {
+                -*self
+            }
+        }
+    }
+}
