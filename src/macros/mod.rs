@@ -3,7 +3,7 @@
 /// # Examples
 ///
 /// ```
-/// #[macro_use(bounded_integer_impl)]
+/// #[macro_use]
 /// extern crate bounded_integer;
 ///
 /// #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -36,9 +36,10 @@ macro_rules! bounded_integer_impl {
     }
 }
 
-/// Implements `PartialOrd` for a `BoundedInteger` enum.
+/// Implements `PartialOrd` for a `BoundedInteger`.
 ///
-/// Only necessary for signed bounded integers. Otherwise, `PartialOrd` can be derived.
+/// Only necessary for signed bounded integer enums. Otherwise, `PartialOrd` can be derived
+/// correctly.
 #[macro_export]
 macro_rules! bounded_integer_partial_ord_impl {
     ($ty:ty) => {
@@ -51,7 +52,7 @@ macro_rules! bounded_integer_partial_ord_impl {
     }
 }
 
-/// Implements `Into<Self::Repr>` for a `BoundedInteger` enum.
+/// Implements `Into<Self::Repr>` for a `BoundedInteger`.
 #[macro_export]
 macro_rules! bounded_integer_into_repr_impl {
     ($ty:ty) => {
@@ -78,6 +79,7 @@ macro_rules! bounded_integer_into_repr_impl {
 /// - `Div<Self::Repr>`
 /// - `Rem<Self>`
 /// - `Rem<Self::Repr>`
+/// - `Neg`
 ///
 /// # Examples
 ///
