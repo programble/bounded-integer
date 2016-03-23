@@ -53,3 +53,13 @@ fn checked_sub() {
     assert_eq!(None, Nibble::N8.checked_sub(Nibble::P1));
     assert_eq!(None, Nibble::P7.checked_sub(Nibble::N1));
 }
+
+#[test]
+fn checked_mul() {
+    assert_eq!(Some(Nibble::P6), Nibble::P2.checked_mul(Nibble::P3));
+    assert_eq!(Some(Nibble::P6), Nibble::N2.checked_mul(Nibble::N3));
+    assert_eq!(Some(Nibble::N6), Nibble::N2.checked_mul(Nibble::P3));
+    assert_eq!(None, Nibble::P2.checked_mul(Nibble::P4));
+    assert_eq!(None, Nibble::N2.checked_mul(Nibble::N4));
+    assert_eq!(None, Nibble::N3.checked_mul(Nibble::P3));
+}
