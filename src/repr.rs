@@ -26,10 +26,10 @@ pub trait Repr: Copy + Eq + Ord {
     fn checked_neg(self) -> Option<Self>;
 }
 
-macro_rules! impl_unsigned {
-    ($ty:ty) => {
+macro_rules! repr_impl {
+    ($i:ident @ $ty:ty) => {
         impl Repr for $ty {
-            fn is_negative(self) -> bool { false }
+            repr_impl!($i);
             fn checked_add(self, other: Self) -> Option<Self> { self.checked_add(other) }
             fn checked_sub(self, other: Self) -> Option<Self> { self.checked_sub(other) }
             fn checked_mul(self, other: Self) -> Option<Self> { self.checked_mul(other) }
@@ -37,29 +37,18 @@ macro_rules! impl_unsigned {
             fn checked_rem(self, other: Self) -> Option<Self> { self.checked_rem(other) }
             fn checked_neg(self) -> Option<Self> { self.checked_neg() }
         }
-    }
+    };
+
+    (u) => { fn is_negative(self) -> bool { false } };
+    (i) => { fn is_negative(self) -> bool { self.is_negative() } };
 }
 
-macro_rules! impl_signed {
-    ($ty:ty) => {
-        impl Repr for $ty {
-            fn is_negative(self) -> bool { self.is_negative() }
-            fn checked_add(self, other: Self) -> Option<Self> { self.checked_add(other) }
-            fn checked_sub(self, other: Self) -> Option<Self> { self.checked_sub(other) }
-            fn checked_mul(self, other: Self) -> Option<Self> { self.checked_mul(other) }
-            fn checked_div(self, other: Self) -> Option<Self> { self.checked_div(other) }
-            fn checked_rem(self, other: Self) -> Option<Self> { self.checked_rem(other) }
-            fn checked_neg(self) -> Option<Self> { self.checked_neg() }
-        }
-    }
-}
+repr_impl!(u @ u8);
+repr_impl!(u @ u16);
+repr_impl!(u @ u32);
+repr_impl!(u @ u64);
 
-impl_unsigned!(u8);
-impl_unsigned!(u16);
-impl_unsigned!(u32);
-impl_unsigned!(u64);
-
-impl_signed!(i8);
-impl_signed!(i16);
-impl_signed!(i32);
-impl_signed!(i64);
+repr_impl!(i @ i8);
+repr_impl!(i @ i16);
+repr_impl!(i @ i32);
+repr_impl!(i @ i64);
