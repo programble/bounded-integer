@@ -86,6 +86,11 @@ pub trait BoundedInteger: Copy + Eq + Ord {
         self.to_repr().checked_rem(other).and_then(Self::from_repr)
     }
 
+    /// Checked integer negation.
+    fn checked_neg(self) -> Option<Self> {
+        self.to_repr().checked_neg().and_then(Self::from_repr)
+    }
+
     /// Saturating integer addition.
     fn saturating_add(self, other: Self) -> Self {
         self.saturating_add_repr(other.to_repr())
