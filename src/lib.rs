@@ -204,6 +204,8 @@ macro_rules! bounded_integer_into_repr_impl {
 /// - `Mul<Self::Repr>`
 /// - `Div<Self>`
 /// - `Div<Self::Repr>`
+/// - `Rem<Self>`
+/// - `Rem<Self::Repr>`
 ///
 /// # Examples
 ///
