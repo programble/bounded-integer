@@ -35,3 +35,21 @@ fn min_value() {
 fn max_value() {
     assert_eq!(Nibble::P7, Nibble::max_value());
 }
+
+#[test]
+fn checked_add() {
+    assert_eq!(Some(Nibble::P3), Nibble::P1.checked_add(Nibble::P2));
+    assert_eq!(Some(Nibble::N3), Nibble::N1.checked_add(Nibble::N2));
+    assert_eq!(Some(Nibble::N1), Nibble::P1.checked_add(Nibble::N2));
+    assert_eq!(None, Nibble::P7.checked_add(Nibble::P1));
+    assert_eq!(None, Nibble::N8.checked_add(Nibble::N1));
+}
+
+#[test]
+fn checked_sub() {
+    assert_eq!(Some(Nibble::P1), Nibble::P3.checked_sub(Nibble::P2));
+    assert_eq!(Some(Nibble::N1), Nibble::N3.checked_sub(Nibble::N2));
+    assert_eq!(Some(Nibble::P1), Nibble::N1.checked_sub(Nibble::N2));
+    assert_eq!(None, Nibble::N8.checked_sub(Nibble::P1));
+    assert_eq!(None, Nibble::P7.checked_sub(Nibble::N1));
+}
