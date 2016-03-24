@@ -158,3 +158,9 @@ fn saturating_mul() {
     assert_eq!(SNibble::N8, SNibble::N2.saturating_mul(SNibble::P5));
     assert_eq!(SNibble::N8, SNibble::P5.saturating_mul(SNibble::N2));
 }
+
+#[test]
+fn saturating_add_repr() {
+    assert_eq!(SNibble::P7, SNibble::P4.saturating_add_repr(4));
+    assert_eq!(SNibble::N8, SNibble::N4.saturating_add_repr(-5));
+}
