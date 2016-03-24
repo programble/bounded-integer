@@ -178,3 +178,10 @@ fn saturating_mul_repr() {
     assert_eq!(SNibble::N8, SNibble::N2.saturating_mul_repr(5));
     assert_eq!(SNibble::N8, SNibble::P5.saturating_mul_repr(-2));
 }
+
+#[test]
+fn into_repr() {
+    assert_eq!(0i8, SNibble::U0.into());
+    assert_eq!(-8i8, SNibble::N8.into());
+    assert_eq!(7i8, SNibble::P7.into());
+}
