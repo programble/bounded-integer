@@ -131,3 +131,10 @@ fn checked_div_repr() {
     assert_eq!(Some(SNibble::N2), SNibble::N6.checked_div_repr(3));
     assert_eq!(None, NZUNibble::U1.checked_div_repr(2));
 }
+
+#[test]
+fn checked_rem_repr() {
+    assert_eq!(Some(SNibble::P1), SNibble::P3.checked_rem_repr(2));
+    assert_eq!(Some(SNibble::N1), SNibble::N3.checked_rem_repr(2));
+    assert_eq!(None, NZUNibble::U2.checked_rem_repr(2));
+}
