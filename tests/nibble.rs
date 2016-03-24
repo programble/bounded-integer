@@ -213,3 +213,17 @@ fn sub_self() {
 fn sub_self_overflow() {
     let _ = SNibble::N8 - SNibble::P1;
 }
+
+#[test]
+fn mul_self() {
+    assert_eq!(SNibble::P6, SNibble::P2 * SNibble::P3);
+    assert_eq!(SNibble::P6, SNibble::P2 * &SNibble::P3);
+    assert_eq!(SNibble::P6, &SNibble::P2 * SNibble::P3);
+    assert_eq!(SNibble::P6, &SNibble::P2 * &SNibble::P3);
+}
+
+#[test]
+#[should_panic]
+fn mul_self_overflow() {
+    let _ = SNibble::P4 * SNibble::P2;
+}
