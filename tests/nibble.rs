@@ -185,3 +185,17 @@ fn into_repr() {
     assert_eq!(-8i8, SNibble::N8.into());
     assert_eq!(7i8, SNibble::P7.into());
 }
+
+#[test]
+fn add_self() {
+    assert_eq!(SNibble::P3, SNibble::P1 + SNibble::P2);
+    assert_eq!(SNibble::P3, SNibble::P1 + &SNibble::P2);
+    assert_eq!(SNibble::P3, &SNibble::P1 + SNibble::P2);
+    assert_eq!(SNibble::P3, &SNibble::P1 + &SNibble::P2);
+}
+
+#[test]
+#[should_panic]
+fn add_self_overflow() {
+    let _ = SNibble::P7 + SNibble::P1;
+}
