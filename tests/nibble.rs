@@ -123,3 +123,11 @@ fn checked_mul_repr() {
     assert_eq!(None, SNibble::N2.checked_mul_repr(-4));
     assert_eq!(None, SNibble::N3.checked_mul_repr(3));
 }
+
+#[test]
+fn checked_div_repr() {
+    assert_eq!(Some(SNibble::P2), SNibble::P6.checked_div_repr(3));
+    assert_eq!(Some(SNibble::P2), SNibble::N6.checked_div_repr(-3));
+    assert_eq!(Some(SNibble::N2), SNibble::N6.checked_div_repr(3));
+    assert_eq!(None, NZUNibble::U1.checked_div_repr(2));
+}
