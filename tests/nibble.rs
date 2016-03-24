@@ -267,3 +267,73 @@ fn neg() {
 fn neg_overflow() {
     let _ = -SNibble::N8;
 }
+
+#[test]
+fn add_repr() {
+    assert_eq!(SNibble::P3, SNibble::P1 + 2);
+    assert_eq!(SNibble::P3, SNibble::P1 + &2);
+    assert_eq!(SNibble::P3, &SNibble::P1 + 2);
+    assert_eq!(SNibble::P3, &SNibble::P1 + &2);
+}
+
+#[test]
+#[should_panic]
+fn add_repr_overflow() {
+    let _ = SNibble::P7 + 1;
+}
+
+#[test]
+fn sub_repr() {
+    assert_eq!(SNibble::P1, SNibble::P3 - 2);
+    assert_eq!(SNibble::P1, SNibble::P3 - &2);
+    assert_eq!(SNibble::P1, &SNibble::P3 - 2);
+    assert_eq!(SNibble::P1, &SNibble::P3 - &2);
+}
+
+#[test]
+#[should_panic]
+fn sub_repr_overflow() {
+    let _ = SNibble::N8 - 1;
+}
+
+#[test]
+fn mul_repr() {
+    assert_eq!(SNibble::P6, SNibble::P2 * 3);
+    assert_eq!(SNibble::P6, SNibble::P2 * &3);
+    assert_eq!(SNibble::P6, &SNibble::P2 * 3);
+    assert_eq!(SNibble::P6, &SNibble::P2 * &3);
+}
+
+#[test]
+#[should_panic]
+fn mul_repr_overflow() {
+    let _ = SNibble::P4 * 2;
+}
+
+#[test]
+fn div_repr() {
+    assert_eq!(SNibble::P2, SNibble::P6 / 3);
+    assert_eq!(SNibble::P2, SNibble::P6 / &3);
+    assert_eq!(SNibble::P2, &SNibble::P6 / 3);
+    assert_eq!(SNibble::P2, &SNibble::P6 / &3);
+}
+
+#[test]
+#[should_panic]
+fn div_repr_overflow() {
+    let _ = NZUNibble::U1 / 2;
+}
+
+#[test]
+fn rem_repr() {
+    assert_eq!(SNibble::P1, SNibble::P3 % 2);
+    assert_eq!(SNibble::P1, SNibble::P3 % &2);
+    assert_eq!(SNibble::P1, &SNibble::P3 % 2);
+    assert_eq!(SNibble::P1, &SNibble::P3 % &2);
+}
+
+#[test]
+#[should_panic]
+fn rem_repr_overflow() {
+    let _ = NZUNibble::U2 % 2;
+}
