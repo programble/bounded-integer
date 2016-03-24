@@ -255,3 +255,15 @@ fn rem_self() {
 fn rem_self_overflow() {
     let _ = NZUNibble::U2 % NZUNibble::U2;
 }
+
+#[test]
+fn neg() {
+    assert_eq!(SNibble::N1, -SNibble::P1);
+    assert_eq!(SNibble::N1, -&SNibble::P1);
+}
+
+#[test]
+#[should_panic]
+fn neg_overflow() {
+    let _ = -SNibble::N8;
+}
