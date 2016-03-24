@@ -104,3 +104,12 @@ fn checked_add_repr() {
     assert_eq!(None, SNibble::P7.checked_add_repr(1));
     assert_eq!(None, SNibble::N8.checked_add_repr(-1));
 }
+
+#[test]
+fn checked_sub_repr() {
+    assert_eq!(Some(SNibble::P1), SNibble::P3.checked_sub_repr(2));
+    assert_eq!(Some(SNibble::N1), SNibble::N3.checked_sub_repr(-2));
+    assert_eq!(Some(SNibble::P1), SNibble::N1.checked_sub_repr(-2));
+    assert_eq!(None, SNibble::N8.checked_sub_repr(1));
+    assert_eq!(None, SNibble::P7.checked_sub_repr(-1));
+}
