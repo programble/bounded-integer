@@ -199,3 +199,17 @@ fn add_self() {
 fn add_self_overflow() {
     let _ = SNibble::P7 + SNibble::P1;
 }
+
+#[test]
+fn sub_self() {
+    assert_eq!(SNibble::P1, SNibble::P3 - SNibble::P2);
+    assert_eq!(SNibble::P1, SNibble::P3 - &SNibble::P2);
+    assert_eq!(SNibble::P1, &SNibble::P3 - SNibble::P2);
+    assert_eq!(SNibble::P1, &SNibble::P3 - &SNibble::P2);
+}
+
+#[test]
+#[should_panic]
+fn sub_self_overflow() {
+    let _ = SNibble::N8 - SNibble::P1;
+}
