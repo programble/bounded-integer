@@ -113,3 +113,13 @@ fn checked_sub_repr() {
     assert_eq!(None, SNibble::N8.checked_sub_repr(1));
     assert_eq!(None, SNibble::P7.checked_sub_repr(-1));
 }
+
+#[test]
+fn checked_mul_repr() {
+    assert_eq!(Some(SNibble::P6), SNibble::P2.checked_mul_repr(3));
+    assert_eq!(Some(SNibble::P6), SNibble::N2.checked_mul_repr(-3));
+    assert_eq!(Some(SNibble::N6), SNibble::N2.checked_mul_repr(3));
+    assert_eq!(None, SNibble::P2.checked_mul_repr(4));
+    assert_eq!(None, SNibble::N2.checked_mul_repr(-4));
+    assert_eq!(None, SNibble::N3.checked_mul_repr(3));
+}
