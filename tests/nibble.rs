@@ -144,3 +144,9 @@ fn saturating_add() {
     assert_eq!(SNibble::P7, SNibble::P4.saturating_add(SNibble::P4));
     assert_eq!(SNibble::N8, SNibble::N4.saturating_add(SNibble::N5));
 }
+
+#[test]
+fn saturating_sub() {
+    assert_eq!(SNibble::P7, SNibble::P4.saturating_sub(SNibble::N4));
+    assert_eq!(SNibble::N8, SNibble::N4.saturating_sub(SNibble::P5));
+}
