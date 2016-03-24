@@ -170,3 +170,11 @@ fn saturating_sub_repr() {
     assert_eq!(SNibble::P7, SNibble::P4.saturating_sub_repr(-4));
     assert_eq!(SNibble::N8, SNibble::N4.saturating_sub_repr(5));
 }
+
+#[test]
+fn saturating_mul_repr() {
+    assert_eq!(SNibble::P7, SNibble::P2.saturating_mul_repr(4));
+    assert_eq!(SNibble::P7, SNibble::N2.saturating_mul_repr(-4));
+    assert_eq!(SNibble::N8, SNibble::N2.saturating_mul_repr(5));
+    assert_eq!(SNibble::N8, SNibble::P5.saturating_mul_repr(-2));
+}
