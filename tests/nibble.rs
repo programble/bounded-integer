@@ -241,3 +241,17 @@ fn div_self() {
 fn div_self_overflow() {
     let _ = NZUNibble::U1 / NZUNibble::U2;
 }
+
+#[test]
+fn rem_self() {
+    assert_eq!(SNibble::P1, SNibble::P3 % SNibble::P2);
+    assert_eq!(SNibble::P1, SNibble::P3 % &SNibble::P2);
+    assert_eq!(SNibble::P1, &SNibble::P3 % SNibble::P2);
+    assert_eq!(SNibble::P1, &SNibble::P3 % &SNibble::P2);
+}
+
+#[test]
+#[should_panic]
+fn rem_self_overflow() {
+    let _ = NZUNibble::U2 % NZUNibble::U2;
+}
