@@ -227,3 +227,17 @@ fn mul_self() {
 fn mul_self_overflow() {
     let _ = SNibble::P4 * SNibble::P2;
 }
+
+#[test]
+fn div_self() {
+    assert_eq!(SNibble::P2, SNibble::P6 / SNibble::P3);
+    assert_eq!(SNibble::P2, SNibble::P6 / &SNibble::P3);
+    assert_eq!(SNibble::P2, &SNibble::P6 / SNibble::P3);
+    assert_eq!(SNibble::P2, &SNibble::P6 / &SNibble::P3);
+}
+
+#[test]
+#[should_panic]
+fn div_self_overflow() {
+    let _ = NZUNibble::U1 / NZUNibble::U2;
+}
