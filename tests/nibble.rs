@@ -86,3 +86,12 @@ fn checked_rem() {
     assert_eq!(Some(SNibble::N1), SNibble::N3.checked_rem(SNibble::P2));
     assert_eq!(None, NZUNibble::U2.checked_rem(NZUNibble::U2));
 }
+
+#[test]
+fn checked_neg() {
+    assert_eq!(Some(SNibble::N3), SNibble::P3.checked_neg());
+    assert_eq!(Some(SNibble::P3), SNibble::N3.checked_neg());
+    assert_eq!(Some(SNibble::U0), SNibble::U0.checked_neg());
+    assert_eq!(None, SNibble::N8.checked_neg());
+    assert_eq!(None, NZUNibble::U3.checked_neg());
+}
