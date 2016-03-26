@@ -5,3 +5,6 @@ authors = ["Curtis McEnroe <programble@gmail.com>"]
 
 [lib]
 plugin = true
+
+[dev-dependencies]
+bounded-integer = { path = "../bounded-integer" }
