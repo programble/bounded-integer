@@ -16,19 +16,21 @@ extern crate syntax;
 extern crate rustc_plugin;
 
 use rustc_plugin::Registry;
-use syntax::ast::{TokenTree, Ident, Expr};
+use syntax::ast::{TokenTree, Ident, Expr, EnumDef, Visibility};
 use syntax::codemap::Span;
-use syntax::ext::base::{ExtCtxt, MacResult, DummyResult};
+use syntax::ext::base::{ExtCtxt, MacResult, DummyResult, MacEager};
+use syntax::ext::build::AstBuilder;
 use syntax::errors::DiagnosticBuilder;
 use syntax::parse::token::{Token, DelimToken};
 use syntax::parse::token::keywords::Keyword;
 use syntax::ptr::P;
+use syntax::util::small_vector::SmallVector;
 
 /// Parsed bounded integer enum.
 #[derive(Debug)]
 struct IntegerEnum {
     is_pub: bool,
-    ident: Ident,
+    name: Ident,
     repr: Ident,
     min: P<Expr>,
     max: P<Expr>,
@@ -54,15 +56,21 @@ fn expand_bounded_integer(
         },
     };
 
-    println!("{:?}", integer_enum);
+    let enum_def = EnumDef { variants: Vec::new() };
+    let enum_item = cx.item_enum(sp, integer_enum.name, enum_def).map(|mut item| {
+        if integer_enum.is_pub {
+            item.vis = Visibility::Public;
+        }
+        item
+    });
 
-    DummyResult::any(sp)
+    MacEager::items(SmallVector::one(enum_item))
 }
 
 /// Parses the argument token trees into an `IntegerEnum`.
 ///
 /// ```text
-/// [pub] enum $ident: $repr { $min...$max }
+/// [pub] enum $name: $repr { $min...$max }
 /// ```
 fn parse_tts<'a>(
     cx: &'a mut ExtCtxt,
@@ -74,8 +82,8 @@ fn parse_tts<'a>(
     let is_pub = parser.eat_keyword(Keyword::Pub);
     try!(parser.expect_keyword(Keyword::Enum));
 
-    // $ident: $repr
-    let ident = try!(parser.parse_ident());
+    // $name: $repr
+    let name = try!(parser.parse_ident());
     try!(parser.expect(&Token::Colon));
     let repr = try!(parser.parse_ident());
 
@@ -88,7 +96,7 @@ fn parse_tts<'a>(
 
     Ok(IntegerEnum {
         is_pub: is_pub,
-        ident: ident,
+        name: name,
         repr: repr,
         min: min,
         max: max,
