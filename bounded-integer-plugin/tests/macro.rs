@@ -10,19 +10,19 @@ use std::ops::{Add, Sub, Mul, Div, Rem, Neg};
 use bounded_integer::{BoundedInteger, Repr};
 
 bounded_integer! {
-    pub enum Bit { 0...1 }
+    pub enum Bit: u8 { 0...1 }
 }
 
 bounded_integer! {
-    enum UNibble { 0...15 }
+    enum UNibble: u8 { 0...15 }
 }
 
 bounded_integer! {
-    enum SNibble { -8...7 }
+    enum SNibble: i8 { -8...7 }
 }
 
 bounded_integer! {
-    enum NZUNibble { 1...15 }
+    enum NZUNibble: u8 { 1...15 }
 }
 
 fn assert_impl_debug<T>() where T: Debug { }
