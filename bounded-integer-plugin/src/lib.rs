@@ -21,12 +21,14 @@ use syntax::codemap::Span;
 use syntax::ext::base::{ExtCtxt, MacResult, DummyResult};
 use syntax::errors::DiagnosticBuilder;
 use syntax::parse;
+use syntax::parse::token::Token;
 use syntax::parse::token::keywords::Keyword;
 
 #[derive(Debug)]
 struct IntEnum {
     is_pub: bool,
     ident: Ident,
+    repr: Ident,
 }
 
 #[plugin_registrar]
@@ -58,9 +60,12 @@ fn parse_tts<'a>(cx: &'a mut ExtCtxt, tts: &[TokenTree]) -> Result<IntEnum, Diag
     let is_pub = parser.eat_keyword(Keyword::Pub);
     try!(parser.expect_keyword(Keyword::Enum));
     let ident = try!(parser.parse_ident());
+    try!(parser.expect(&Token::Colon));
+    let repr = try!(parser.parse_ident());
 
     Ok(IntEnum {
         is_pub: is_pub,
         ident: ident,
+        repr: repr,
     })
 }
