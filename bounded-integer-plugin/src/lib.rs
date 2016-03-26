@@ -25,8 +25,9 @@ use syntax::parse::token::{Token, DelimToken};
 use syntax::parse::token::keywords::Keyword;
 use syntax::ptr::P;
 
+/// Parsed bounded integer enum.
 #[derive(Debug)]
-struct IntEnum {
+struct IntegerEnum {
     is_pub: bool,
     ident: Ident,
     repr: Ident,
@@ -34,46 +35,59 @@ struct IntEnum {
     max: P<Expr>,
 }
 
+/// Registers the `bounded_integer!` macro.
 #[plugin_registrar]
 pub fn plugin_registrar(reg: &mut Registry) {
     reg.register_macro("bounded_integer", expand_bounded_integer);
 }
 
+/// Expands the `bounded_integer!` macro.
 fn expand_bounded_integer(
     cx: &mut ExtCtxt,
     sp: Span,
-    tts: &[TokenTree]
+    tts: &[TokenTree],
 ) -> Box<MacResult + 'static> {
-    let int_enum = match parse_tts(cx, tts) {
+    let integer_enum = match parse_tts(cx, tts) {
         Ok(ie) => ie,
         Err(mut err) => {
             err.emit();
             return DummyResult::any(sp);
-        }
+        },
     };
 
-    println!("{:?}", int_enum);
+    println!("{:?}", integer_enum);
 
     DummyResult::any(sp)
 }
 
-fn parse_tts<'a>(cx: &'a mut ExtCtxt, tts: &[TokenTree]) -> Result<IntEnum, DiagnosticBuilder<'a>> {
+/// Parses the argument token trees into an `IntegerEnum`.
+///
+/// ```text
+/// [pub] enum $ident: $repr { $min...$max }
+/// ```
+fn parse_tts<'a>(
+    cx: &'a mut ExtCtxt,
+    tts: &[TokenTree],
+) -> Result<IntegerEnum, DiagnosticBuilder<'a>> {
     let mut parser = parse::new_parser_from_tts(cx.parse_sess(), cx.cfg(), tts.to_vec());
 
+    // pub enum
     let is_pub = parser.eat_keyword(Keyword::Pub);
     try!(parser.expect_keyword(Keyword::Enum));
 
+    // $ident: $repr
     let ident = try!(parser.parse_ident());
     try!(parser.expect(&Token::Colon));
     let repr = try!(parser.parse_ident());
 
+    // { $min...$max }
     try!(parser.expect(&Token::OpenDelim(DelimToken::Brace)));
     let min = try!(parser.parse_pat_literal_maybe_minus());
     try!(parser.expect(&Token::DotDotDot));
     let max = try!(parser.parse_pat_literal_maybe_minus());
     try!(parser.expect(&Token::CloseDelim(DelimToken::Brace)));
 
-    Ok(IntEnum {
+    Ok(IntegerEnum {
         is_pub: is_pub,
         ident: ident,
         repr: repr,
