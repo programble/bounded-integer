@@ -16,19 +16,22 @@ extern crate syntax;
 extern crate rustc_plugin;
 
 use rustc_plugin::Registry;
-use syntax::ast::{TokenTree, Ident};
+use syntax::ast::{TokenTree, Ident, Expr};
 use syntax::codemap::Span;
 use syntax::ext::base::{ExtCtxt, MacResult, DummyResult};
 use syntax::errors::DiagnosticBuilder;
 use syntax::parse;
-use syntax::parse::token::Token;
+use syntax::parse::token::{Token, DelimToken};
 use syntax::parse::token::keywords::Keyword;
+use syntax::ptr::P;
 
 #[derive(Debug)]
 struct IntEnum {
     is_pub: bool,
     ident: Ident,
     repr: Ident,
+    min: P<Expr>,
+    max: P<Expr>,
 }
 
 #[plugin_registrar]
@@ -59,13 +62,22 @@ fn parse_tts<'a>(cx: &'a mut ExtCtxt, tts: &[TokenTree]) -> Result<IntEnum, Diag
 
     let is_pub = parser.eat_keyword(Keyword::Pub);
     try!(parser.expect_keyword(Keyword::Enum));
+
     let ident = try!(parser.parse_ident());
     try!(parser.expect(&Token::Colon));
     let repr = try!(parser.parse_ident());
+
+    try!(parser.expect(&Token::OpenDelim(DelimToken::Brace)));
+    let min = try!(parser.parse_pat_literal_maybe_minus());
+    try!(parser.expect(&Token::DotDotDot));
+    let max = try!(parser.parse_pat_literal_maybe_minus());
+    try!(parser.expect(&Token::CloseDelim(DelimToken::Brace)));
 
     Ok(IntEnum {
         is_pub: is_pub,
         ident: ident,
         repr: repr,
+        min: min,
+        max: max,
     })
 }
