@@ -9,13 +9,13 @@ bounded_integer! {
 }
 
 bounded_integer! {
-    enum UNibble { 0..15 }
+    enum UNibble { 0...15 }
 }
 
 bounded_integer! {
-    enum SNibble { -8..7 }
+    enum SNibble { -8...7 }
 }
 
 bounded_integer! {
-    enum NZUNibble { 1..15 }
+    enum NZUNibble { 1...15 }
 }
