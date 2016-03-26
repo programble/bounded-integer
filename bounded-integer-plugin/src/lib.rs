@@ -20,7 +20,6 @@ use syntax::ast::{TokenTree, Ident, Expr};
 use syntax::codemap::Span;
 use syntax::ext::base::{ExtCtxt, MacResult, DummyResult};
 use syntax::errors::DiagnosticBuilder;
-use syntax::parse;
 use syntax::parse::token::{Token, DelimToken};
 use syntax::parse::token::keywords::Keyword;
 use syntax::ptr::P;
@@ -69,7 +68,7 @@ fn parse_tts<'a>(
     cx: &'a mut ExtCtxt,
     tts: &[TokenTree],
 ) -> Result<IntegerEnum, DiagnosticBuilder<'a>> {
-    let mut parser = parse::new_parser_from_tts(cx.parse_sess(), cx.cfg(), tts.to_vec());
+    let mut parser = cx.new_parser_from_tts(tts);
 
     // pub enum
     let is_pub = parser.eat_keyword(Keyword::Pub);
