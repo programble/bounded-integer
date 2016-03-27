@@ -1,13 +1,23 @@
+#![allow(dead_code)]
 #![feature(plugin)]
 #![plugin(bounded_integer_plugin)]
 
-bounded_integer! { enum Bit: u8 { 0...1 } }
+use std::hash::Hash;
 
-mod module {
-    bounded_integer! { pub enum Public: u8 { 1...2 } }
+trait AssertDefined { }
+trait AssertImplHash: Hash { }
+
+bounded_integer! { enum A: u8 { 0...5 } }
+impl AssertDefined for A { }
+
+mod b {
+    bounded_integer! { pub enum B: u8 { 0...5 } }
 }
+impl AssertDefined for b::B { }
 
-trait AssertDefined<T> { }
-
-impl AssertDefined<Bit> { }
-impl AssertDefined<module::Public> { }
+bounded_integer! {
+    #[derive(Hash)]
+    enum C: u8 { 0...5 }
+}
+impl AssertDefined for C { }
+impl AssertImplHash for C { }
