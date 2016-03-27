@@ -16,7 +16,7 @@ extern crate syntax;
 extern crate rustc_plugin;
 
 use rustc_plugin::Registry;
-use syntax::ast::{TokenTree, Ident, Expr, EnumDef, Visibility};
+use syntax::ast::{TokenTree, Ident, Expr, EnumDef, Visibility, Attribute};
 use syntax::codemap::Span;
 use syntax::ext::base::{ExtCtxt, MacResult, DummyResult, MacEager};
 use syntax::ext::build::AstBuilder;
@@ -29,6 +29,7 @@ use syntax::util::small_vector::SmallVector;
 /// Parsed bounded integer enum.
 #[derive(Debug)]
 struct IntegerEnum {
+    attrs: Vec<Attribute>,
     is_pub: bool,
     name: Ident,
     repr: Ident,
@@ -70,6 +71,7 @@ fn expand_bounded_integer(
 /// Parses the argument token trees into an `IntegerEnum`.
 ///
 /// ```text
+/// $(#[$attr])*
 /// [pub] enum $name: $repr { $min...$max }
 /// ```
 fn parse_tts<'a>(
@@ -77,6 +79,9 @@ fn parse_tts<'a>(
     tts: &[TokenTree],
 ) -> Result<IntegerEnum, DiagnosticBuilder<'a>> {
     let mut parser = cx.new_parser_from_tts(tts);
+
+    // $(#[$attr])*
+    let attrs = try!(parser.parse_outer_attributes());
 
     // pub enum
     let is_pub = parser.eat_keyword(Keyword::Pub);
@@ -95,6 +100,7 @@ fn parse_tts<'a>(
     try!(parser.expect(&Token::CloseDelim(DelimToken::Brace)));
 
     Ok(IntegerEnum {
+        attrs: attrs,
         is_pub: is_pub,
         name: name,
         repr: repr,
