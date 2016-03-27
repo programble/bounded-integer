@@ -16,7 +16,7 @@ extern crate syntax;
 extern crate rustc_plugin;
 
 use rustc_plugin::Registry;
-use syntax::ast::{TokenTree, Ident, Expr, EnumDef, Visibility, Attribute};
+use syntax::ast::{TokenTree, Ident, Expr, EnumDef, Visibility, Attribute, ItemKind};
 use syntax::codemap::Span;
 use syntax::ext::base::{ExtCtxt, MacResult, DummyResult, MacEager};
 use syntax::ext::build::AstBuilder;
@@ -58,10 +58,14 @@ fn expand_bounded_integer(
     };
 
     let enum_def = EnumDef { variants: Vec::new() };
-    let enum_item = cx.item_enum(sp, integer_enum.name, enum_def).map(|mut item| {
-        if integer_enum.is_pub {
-            item.vis = Visibility::Public;
-        }
+    let is_pub = integer_enum.is_pub;
+    let enum_item = cx.item(
+        sp,
+        integer_enum.name,
+        integer_enum.attrs,
+        ItemKind::Enum(enum_def, Default::default())
+    ).map(|mut item| {
+        if is_pub { item.vis = Visibility::Public; }
         item
     });
 
