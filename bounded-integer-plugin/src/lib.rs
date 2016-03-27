@@ -16,7 +16,7 @@ extern crate syntax;
 extern crate rustc_plugin;
 
 use rustc_plugin::Registry;
-use syntax::ast::{TokenTree, Ident, Expr, EnumDef, Visibility, Attribute, ItemKind};
+use syntax::ast::{TokenTree, Ident, Expr, EnumDef, Visibility, Attribute, ItemKind, Item};
 use syntax::codemap::Span;
 use syntax::ext::base::{ExtCtxt, MacResult, DummyResult, MacEager};
 use syntax::ext::build::AstBuilder;
@@ -56,27 +56,15 @@ fn expand_bounded_integer(
             return DummyResult::any(sp);
         },
     };
-
-    let enum_def = EnumDef { variants: Vec::new() };
-    let is_pub = integer_enum.is_pub;
-    let enum_item = cx.item(
-        sp,
-        integer_enum.name,
-        integer_enum.attrs,
-        ItemKind::Enum(enum_def, Default::default())
-    ).map(|mut item| {
-        if is_pub { item.vis = Visibility::Public; }
-        item
-    });
-
-    MacEager::items(SmallVector::one(enum_item))
+    let item = integer_enum.into_item(cx, sp);
+    MacEager::items(SmallVector::one(item))
 }
 
 /// Parses the argument token trees into an `IntegerEnum`.
 ///
 /// ```text
-/// $(#[$attr])*
-/// [pub] enum $name: $repr { $min...$max }
+/// $(#[$attr:meta])*
+/// [pub] enum $name:ident: $repr:ident { $min:expr...$max:expr }
 /// ```
 fn parse_tts<'a>(
     cx: &'a mut ExtCtxt,
@@ -84,19 +72,19 @@ fn parse_tts<'a>(
 ) -> Result<IntegerEnum, DiagnosticBuilder<'a>> {
     let mut parser = cx.new_parser_from_tts(tts);
 
-    // $(#[$attr])*
+    // $(#[$attr:meta])*
     let attrs = try!(parser.parse_outer_attributes());
 
-    // pub enum
+    // [pub] enum
     let is_pub = parser.eat_keyword(Keyword::Pub);
     try!(parser.expect_keyword(Keyword::Enum));
 
-    // $name: $repr
+    // $name:ident: $repr:ident
     let name = try!(parser.parse_ident());
     try!(parser.expect(&Token::Colon));
     let repr = try!(parser.parse_ident());
 
-    // { $min...$max }
+    // { $min:expr...$max:expr }
     try!(parser.expect(&Token::OpenDelim(DelimToken::Brace)));
     let min = try!(parser.parse_pat_literal_maybe_minus());
     try!(parser.expect(&Token::DotDotDot));
@@ -111,4 +99,17 @@ fn parse_tts<'a>(
         min: min,
         max: max,
     })
+}
+
+impl IntegerEnum {
+    /// Creates an item from the parsed bounded integer enum.
+    fn into_item(self, cx: &mut ExtCtxt, sp: Span) -> P<Item> {
+        let is_pub = self.is_pub;
+        let enum_def = EnumDef { variants: Vec::new() };
+        let item_kind = ItemKind::Enum(enum_def, Default::default());
+        cx.item(sp, self.name, self.attrs, item_kind).map(|mut item| {
+            if is_pub { item.vis = Visibility::Public; }
+            item
+        })
+    }
 }
