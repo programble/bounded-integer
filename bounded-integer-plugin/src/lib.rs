@@ -21,7 +21,7 @@ use syntax::codemap::Span;
 use syntax::ext::base::{ExtCtxt, MacResult, DummyResult, MacEager};
 use syntax::ext::build::AstBuilder;
 use syntax::errors::DiagnosticBuilder;
-use syntax::parse::token::{Token, DelimToken};
+use syntax::parse::token::{Token, DelimToken, InternedString};
 use syntax::parse::token::keywords::Keyword;
 use syntax::ptr::P;
 use syntax::util::small_vector::SmallVector;
@@ -49,13 +49,14 @@ fn expand_bounded_integer(
     sp: Span,
     tts: &[TokenTree],
 ) -> Box<MacResult + 'static> {
-    let integer_enum = match parse_tts(cx, tts) {
+    let mut integer_enum = match parse_tts(cx, tts) {
         Ok(ie) => ie,
         Err(mut err) => {
             err.emit();
             return DummyResult::any(sp);
         },
     };
+    integer_enum.add_derives(cx, sp);
     let item = integer_enum.into_item(cx, sp);
     MacEager::items(SmallVector::one(item))
 }
@@ -102,6 +103,16 @@ fn parse_tts<'a>(
 }
 
 impl IntegerEnum {
+    /// Adds `#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]` to the attributes.
+    fn add_derives(&mut self, cx: &mut ExtCtxt, sp: Span) {
+        let derives = ["Clone", "Copy", "PartialEq", "Eq", "PartialOrd", "Ord"].iter()
+            .map(|s| InternedString::new(s))
+            .map(|s| cx.meta_word(sp, s))
+            .collect();
+        let derive_list = cx.meta_list(sp, InternedString::new("derive"), derives);
+        self.attrs.push(cx.attribute(sp, derive_list));
+    }
+
     /// Creates an item from the parsed bounded integer enum.
     fn into_item(self, cx: &mut ExtCtxt, sp: Span) -> P<Item> {
         let is_pub = self.is_pub;
