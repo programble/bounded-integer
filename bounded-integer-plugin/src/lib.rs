@@ -57,6 +57,7 @@ fn expand_bounded_integer(
         },
     };
     integer_enum.add_derives(cx, sp);
+    integer_enum.add_repr(cx, sp);
     let item = integer_enum.into_item(cx, sp);
     MacEager::items(SmallVector::one(item))
 }
@@ -111,6 +112,13 @@ impl IntegerEnum {
             .collect();
         let derive_list = cx.meta_list(sp, InternedString::new("derive"), derives);
         self.attrs.push(cx.attribute(sp, derive_list));
+    }
+
+    /// Adds `#[repr($repr)]` to the attributes.
+    fn add_repr(&mut self, cx: &mut ExtCtxt, sp: Span) {
+        let repr = cx.meta_word(sp, self.repr.name.as_str());
+        let repr_list = cx.meta_list(sp, InternedString::new("repr"), vec![repr_meta]);
+        self.attrs.push(cx.attribute(sp, repr_list));
     }
 
     /// Creates an item from the parsed bounded integer enum.
