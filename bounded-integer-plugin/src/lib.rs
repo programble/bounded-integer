@@ -16,12 +16,22 @@ extern crate syntax;
 extern crate rustc_plugin;
 
 use rustc_plugin::Registry;
-use syntax::ast::{TokenTree, Ident, Expr, EnumDef, Visibility, Attribute, ItemKind, Item};
+use syntax::ast::{
+    Attribute,
+    EnumDef,
+    Expr,
+    Ident,
+    Item,
+    ItemKind,
+    TokenTree,
+    Variant,
+    Visibility,
+};
 use syntax::codemap::Span;
-use syntax::ext::base::{ExtCtxt, MacResult, DummyResult, MacEager};
+use syntax::ext::base::{DummyResult, ExtCtxt, MacEager, MacResult};
 use syntax::ext::build::AstBuilder;
 use syntax::errors::DiagnosticBuilder;
-use syntax::parse::token::{Token, DelimToken, InternedString};
+use syntax::parse::token::{DelimToken, InternedString, Token};
 use syntax::parse::token::keywords::Keyword;
 use syntax::ptr::P;
 use syntax::util::small_vector::SmallVector;
@@ -121,16 +131,15 @@ impl IntegerEnum {
         self.attrs.push(cx.attribute(sp, repr_list));
     }
 
+    /// Generates variants for the range.
+    fn variants(&self, cx: &mut ExtCtxt, sp: Span) -> Vec<Variant> {
+        vec![cx.variant(sp, cx.ident_of("Dummy"), vec![])]
+    }
+
     /// Creates an item from the parsed bounded integer enum.
     fn into_item(self, cx: &mut ExtCtxt, sp: Span) -> P<Item> {
         let is_pub = self.is_pub;
-
-        let enum_def = EnumDef {
-            variants: vec![
-                cx.variant(sp, cx.ident_of("Dummy"), vec![]),
-            ],
-        };
-
+        let enum_def = EnumDef { variants: self.variants(cx, sp) };
         let item_kind = ItemKind::Enum(enum_def, Default::default());
         cx.item(sp, self.name, self.attrs, item_kind).map(|mut item| {
             if is_pub { item.vis = Visibility::Public; }
