@@ -116,7 +116,13 @@ impl IntegerEnum {
     /// Creates an item from the parsed bounded integer enum.
     fn into_item(self, cx: &mut ExtCtxt, sp: Span) -> P<Item> {
         let is_pub = self.is_pub;
-        let enum_def = EnumDef { variants: Vec::new() };
+
+        let enum_def = EnumDef {
+            variants: vec![
+                cx.variant(sp, cx.ident_of("Dummy"), vec![]),
+            ],
+        };
+
         let item_kind = ItemKind::Enum(enum_def, Default::default());
         cx.item(sp, self.name, self.attrs, item_kind).map(|mut item| {
             if is_pub { item.vis = Visibility::Public; }
