@@ -117,7 +117,7 @@ impl IntegerEnum {
     /// Adds `#[repr($repr)]` to the attributes.
     fn add_repr(&mut self, cx: &mut ExtCtxt, sp: Span) {
         let repr = cx.meta_word(sp, self.repr.name.as_str());
-        let repr_list = cx.meta_list(sp, InternedString::new("repr"), vec![repr_meta]);
+        let repr_list = cx.meta_list(sp, InternedString::new("repr"), vec![repr]);
         self.attrs.push(cx.attribute(sp, repr_list));
     }
 
