@@ -136,14 +136,27 @@ impl IntegerEnum {
     }
 
     /// Generates variants for the range.
-    fn variants(&self, cx: &mut ExtCtxt, sp: Span) -> Vec<Variant> {
-        vec![cx.variant(sp, cx.ident_of("Dummy"), vec![])]
+    fn variants(&self, cx: &mut ExtCtxt) -> Vec<Variant> {
+        let mut vec = Vec::new();
+        let mut current = self.min.clone();
+        loop {
+            let (neg, int) = expr_intlit(&*current).unwrap(); // FIXME
+            let mut variant = cx.variant(current.span, intlit_ident(cx, neg, int), vec![]);
+            variant.node.disr_expr = Some(current);
+            vec.push(variant);
+
+            // FIXME: Infinite loop risk.
+            if Ok((neg, int)) == expr_intlit(&*self.max) { break; }
+            let (neg, int) = intlit_succ(neg, int);
+            current = intlit_expr(cx, self.min.span, neg, int);
+        }
+        vec
     }
 
     /// Creates an item from the parsed bounded integer enum.
     fn into_item(self, cx: &mut ExtCtxt, sp: Span) -> P<Item> {
         let is_pub = self.is_pub;
-        let enum_def = EnumDef { variants: self.variants(cx, sp) };
+        let enum_def = EnumDef { variants: self.variants(cx) };
         let item_kind = ItemKind::Enum(enum_def, Default::default());
         cx.item(sp, self.name, self.attrs, item_kind).map(|mut item| {
             if is_pub { item.vis = Visibility::Public; }
@@ -153,21 +166,21 @@ impl IntegerEnum {
 }
 
 /// Extracts `(neg, int)` from an integer literal expression.
-fn expr_int(expr: &Expr) -> Result<(bool, u64), ()> {
+fn expr_intlit(expr: &Expr) -> Result<(bool, u64), ()> {
     match expr.node {
         ExprKind::Lit(ref lit) => match lit.node {
             LitKind::Int(i, _) => Ok((false, i)),
             _ => Err(()),
         },
         ExprKind::Unary(UnOp::Neg, ref expr) => {
-            expr_int(&*expr).map(|(_, i)| (true, i))
+            expr_intlit(&*expr).map(|(_, i)| (true, i))
         },
         _ => Err(()),
     }
 }
 
 /// Creates an integer literal expression.
-fn int_expr(cx: &mut ExtCtxt, sp: Span, neg: bool, int: u64) -> P<Expr> {
+fn intlit_expr(cx: &mut ExtCtxt, sp: Span, neg: bool, int: u64) -> P<Expr> {
     let lit = cx.expr_lit(sp, LitKind::Int(int, LitIntType::Unsuffixed));
     if neg {
         cx.expr_unary(sp, UnOp::Neg, lit)
@@ -176,22 +189,17 @@ fn int_expr(cx: &mut ExtCtxt, sp: Span, neg: bool, int: u64) -> P<Expr> {
     }
 }
 
-/// Increments an integer literal expression, returning a new expression.
-fn expr_inc(cx: &mut ExtCtxt, expr: &Expr) -> Result<P<Expr>, ()> {
-    let (mut neg, mut int) = try!(expr_int(expr));
-    if neg && int == 1 {
-        neg = false;
-        int = 0;
-    } else if neg {
-        int -= 1;
-    } else {
-        int += 1;
+/// Returns the successive integer literal.
+fn intlit_succ(neg: bool, int: u64) -> (bool, u64) {
+    match (neg, int) {
+        (true, 1) => (false, 0),
+        (true, i) => (true, i - 1),
+        (false, i) => (false, i + 1),
     }
-    Ok(int_expr(cx, expr.span, neg, int))
 }
 
 /// Creates an ident for an integer literal.
-fn int_ident(cx: &mut ExtCtxt, neg: bool, int: u64) -> Ident {
+fn intlit_ident(cx: &ExtCtxt, neg: bool, int: u64) -> Ident {
     let prefix = match (neg, int) {
         (true, _) => 'N',
         (false, 0) => 'Z',
