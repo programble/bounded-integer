@@ -20,10 +20,14 @@ use syntax::ast::{
     Attribute,
     EnumDef,
     Expr,
+    ExprKind,
     Ident,
     Item,
     ItemKind,
+    LitIntType,
+    LitKind,
     TokenTree,
+    UnOp,
     Variant,
     Visibility,
 };
@@ -146,4 +150,42 @@ impl IntegerEnum {
             item
         })
     }
+}
+
+/// Extracts `(neg, int)` from an integer literal expression.
+fn expr_int(expr: &Expr) -> Result<(bool, u64), ()> {
+    match expr.node {
+        ExprKind::Lit(ref lit) => match lit.node {
+            LitKind::Int(i, _) => Ok((false, i)),
+            _ => Err(()),
+        },
+        ExprKind::Unary(UnOp::Neg, ref expr) => {
+            expr_int(&*expr).map(|(_, i)| (true, i))
+        },
+        _ => Err(()),
+    }
+}
+
+/// Creates an integer literal expression.
+fn int_expr(cx: &mut ExtCtxt, sp: Span, neg: bool, int: u64) -> P<Expr> {
+    let lit = cx.expr_lit(sp, LitKind::Int(int, LitIntType::Unsuffixed));
+    if neg {
+        cx.expr_unary(sp, UnOp::Neg, lit)
+    } else {
+        lit
+    }
+}
+
+/// Increments an integer literal expression, returning a new expression.
+fn expr_inc(cx: &mut ExtCtxt, sp: Span, expr: &Expr) -> Result<P<Expr>, ()> {
+    let (mut neg, mut int) = try!(expr_int(expr));
+    if neg && int == 1 {
+        neg = false;
+        int = 0;
+    } else if neg {
+        int -= 1;
+    } else {
+        int += 1;
+    }
+    Ok(int_expr(cx, sp, neg, int))
 }
