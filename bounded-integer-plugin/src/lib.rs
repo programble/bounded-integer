@@ -177,7 +177,7 @@ fn int_expr(cx: &mut ExtCtxt, sp: Span, neg: bool, int: u64) -> P<Expr> {
 }
 
 /// Increments an integer literal expression, returning a new expression.
-fn expr_inc(cx: &mut ExtCtxt, sp: Span, expr: &Expr) -> Result<P<Expr>, ()> {
+fn expr_inc(cx: &mut ExtCtxt, expr: &Expr) -> Result<P<Expr>, ()> {
     let (mut neg, mut int) = try!(expr_int(expr));
     if neg && int == 1 {
         neg = false;
@@ -187,5 +187,5 @@ fn expr_inc(cx: &mut ExtCtxt, sp: Span, expr: &Expr) -> Result<P<Expr>, ()> {
     } else {
         int += 1;
     }
-    Ok(int_expr(cx, sp, neg, int))
+    Ok(int_expr(cx, expr.span, neg, int))
 }
