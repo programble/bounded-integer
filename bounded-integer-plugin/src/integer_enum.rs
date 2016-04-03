@@ -19,23 +19,36 @@ use syntax::ptr::P;
 
 use IntLit;
 
-/// Parsed bounded integer enum
+/// Parsed bounded integer enum.
 #[derive(Debug)]
 pub struct IntegerEnum {
-    attrs: Vec<Attribute>,
-    is_pub: bool,
-    name: Ident,
-    repr: Ident,
-    min: P<Expr>,
-    max: P<Expr>,
+    /// Attributes.
+    pub attrs: Vec<Attribute>,
+
+    /// Visibility.
+    pub is_pub: bool,
+
+    /// Name.
+    pub name: Ident,
+
+    /// Representation.
+    pub repr: Ident,
+
+    /// Minimum value.
+    pub min: P<Expr>,
+
+    /// Maximum value.
+    pub max: P<Expr>,
 }
 
 impl IntegerEnum {
-    /// Parses a slice of token trees into an `IntegerEnum`.
+    /// Parses a slice of token trees.
+    ///
+    /// Roughly equivalent to:
     ///
     /// ```text
     /// $(#[$attr:meta])*
-    /// [pub] enum $name:ident: $repr:ident { $min:expr...$max:expr }
+    /// $(pub)? enum $name:ident: $repr:ident { $min:expr...$max:expr }
     /// ```
     pub fn parse_tts<'a>(
         cx: &'a ExtCtxt,
@@ -46,7 +59,7 @@ impl IntegerEnum {
         // $(#[$attr:meta])*
         let attrs = try!(parser.parse_outer_attributes());
 
-        // [pub] enum
+        // $(pub)? enum
         let is_pub = parser.eat_keyword(Keyword::Pub);
         try!(parser.expect_keyword(Keyword::Enum));
 
@@ -74,7 +87,12 @@ impl IntegerEnum {
         })
     }
 
-    /// Creates an enum item from self.
+    /// Creates an enum item.
+    ///
+    /// - Adds `#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]`
+    /// - Adds `#[repr($repr)]`
+    /// - Generates variants of the form `...N1, Z0, P1...`.
+    /// - Sets item visibility.
     pub fn into_item(mut self, cx: &ExtCtxt, sp: Span) -> P<Item> {
         self.add_derives(cx, sp);
         self.add_repr(cx, sp);
@@ -105,7 +123,7 @@ impl IntegerEnum {
         self.attrs.push(cx.attribute(sp, repr_list));
     }
 
-    /// Generates variants for the range.
+    /// Generates variants for the range of the form `N1, Z0, P1`.
     fn variants(&self, cx: &ExtCtxt) -> Vec<Variant> {
         let mut vec = Vec::new();
         let mut current = self.min.clone();

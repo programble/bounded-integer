@@ -1,6 +1,9 @@
+//! Bounded integer plugin.
+
 #![feature(plugin_registrar, rustc_private)]
 
 #![warn(
+    missing_docs,
     missing_debug_implementations,
     missing_copy_implementations,
     trivial_casts,
@@ -34,7 +37,7 @@ pub fn plugin_registrar(reg: &mut Registry) {
 }
 
 /// Expands the `bounded_integer!` macro.
-fn expand_bounded_integer(
+pub fn expand_bounded_integer(
     cx: &mut ExtCtxt,
     sp: Span,
     tts: &[TokenTree],

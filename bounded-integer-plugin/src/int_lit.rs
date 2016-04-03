@@ -11,11 +11,14 @@ use syntax::ext::base::ExtCtxt;
 use syntax::ext::build::AstBuilder;
 use syntax::ptr::P;
 
-/// A signed integer literal.
+/// Signed integer literal.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct IntLit {
-    neg: bool,
-    int: u64,
+    /// Negative.
+    pub neg: bool,
+
+    /// Integer.
+    pub int: u64,
 }
 
 impl IntLit {
@@ -43,7 +46,7 @@ impl IntLit {
         }
     }
 
-    /// Creates an ident for an integer literal.
+    /// Creates an ident for an integer literal of the form `...N1, Z0, P1...`.
     pub fn into_ident(self, cx: &ExtCtxt) -> Ident {
         let prefix = match (self.neg, self.int) {
             (true, _) => 'N',
