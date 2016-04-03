@@ -10,12 +10,25 @@ trait AssertImplCopy: Copy { }
 trait AssertImplEq: Eq { }
 trait AssertImplOrd: Ord { }
 trait AssertSizeOf<T> { fn assert(self) -> T; }
+trait AssertVariants { fn assert(self); }
 
 macro_rules! assert_size_of {
     ($a:ty, $b:ty) => {
         impl AssertSizeOf<$a> for $b {
             fn assert(self) -> $a {
                 unsafe { std::mem::transmute(self) }
+            }
+        }
+    }
+}
+
+macro_rules! assert_variants {
+    ($a:ty { $($v:pat),+ }) => {
+        impl AssertVariants for $a {
+            fn assert(self) {
+                match self {
+                    $($v => ()),+
+                }
             }
         }
     }
@@ -59,3 +72,25 @@ assert_size_of!(u32, I);
 assert_size_of!(i32, J);
 assert_size_of!(u64, K);
 assert_size_of!(i64, L);
+
+bounded_integer! { enum M: i8 { 0...0 } }
+bounded_integer! { enum N: i8 { -3...3 } }
+
+assert_variants!(M { M::Z0 });
+assert_variants!(N { N::N3, N::N2, N::N1, N::Z0, N::P1, N::P2, N::P3 });
+
+#[test]
+fn m_variants() {
+    assert_eq!(0, M::Z0 as i8);
+}
+
+#[test]
+fn n_variants() {
+    assert_eq!(-3, N::N3 as i8);
+    assert_eq!(-2, N::N2 as i8);
+    assert_eq!(-1, N::N1 as i8);
+    assert_eq!(0, N::Z0 as i8);
+    assert_eq!(1, N::P1 as i8);
+    assert_eq!(2, N::P2 as i8);
+    assert_eq!(3, N::P3 as i8);
+}
