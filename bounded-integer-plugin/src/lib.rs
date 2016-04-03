@@ -189,3 +189,13 @@ fn expr_inc(cx: &mut ExtCtxt, expr: &Expr) -> Result<P<Expr>, ()> {
     }
     Ok(int_expr(cx, expr.span, neg, int))
 }
+
+/// Creates an ident for an integer literal.
+fn int_ident(cx: &mut ExtCtxt, neg: bool, int: u64) -> Ident {
+    let prefix = match (neg, int) {
+        (true, _) => 'N',
+        (false, 0) => 'Z',
+        (false, _) => 'P',
+    };
+    cx.ident_of(&format!("{}{}", prefix, int))
+}
