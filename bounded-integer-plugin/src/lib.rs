@@ -49,6 +49,6 @@ pub fn expand_bounded_integer(
             return DummyResult::any(sp);
         },
     };
-    let item = integer_enum.into_item(cx, sp);
-    MacEager::items(SmallVector::one(item))
+    let items = integer_enum.into_items(cx, sp);
+    MacEager::items(SmallVector::many(items))
 }

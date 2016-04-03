@@ -1,20 +1,23 @@
 use syntax::ast::{
+    self,
     Attribute,
     EnumDef,
     Expr,
     Ident,
     Item,
     ItemKind,
+    Mac_,
     TokenTree,
     Variant,
     Visibility,
 };
-use syntax::codemap::Span;
+use syntax::codemap::{self, Span};
 use syntax::errors::DiagnosticBuilder;
 use syntax::ext::base::ExtCtxt;
 use syntax::ext::build::AstBuilder;
 use syntax::parse::token::{DelimToken, InternedString, Token};
 use syntax::parse::token::keywords::Keyword;
+use syntax::parse::token::special_idents;
 use syntax::ptr::P;
 
 use IntLit;
@@ -87,23 +90,28 @@ impl IntegerEnum {
         })
     }
 
-    /// Creates an enum item.
+    /// Creates an enum item and a `bounded_integer_impls` macro invocation item.
     ///
     /// - Adds `#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]`
     /// - Adds `#[repr($repr)]`
     /// - Generates variants of the form `...N1, Z0, P1...`.
     /// - Sets item visibility.
-    pub fn into_item(mut self, cx: &ExtCtxt, sp: Span) -> P<Item> {
+    pub fn into_items(mut self, cx: &ExtCtxt, sp: Span) -> Vec<P<Item>> {
         self.add_derives(cx, sp);
         self.add_repr(cx, sp);
 
+        let variants = self.variants(cx);
+        let impls_macro_item = self.impls_macro_item(&variants, cx, sp);
+
+        let enum_def = EnumDef { variants: variants };
+        let enum_kind = ItemKind::Enum(enum_def, Default::default());
         let is_pub = self.is_pub;
-        let enum_def = EnumDef { variants: self.variants(cx) };
-        let item_kind = ItemKind::Enum(enum_def, Default::default());
-        cx.item(sp, self.name, self.attrs, item_kind).map(|mut item| {
+        let enum_item = cx.item(sp, self.name, self.attrs, enum_kind).map(|mut item| {
             if is_pub { item.vis = Visibility::Public; }
             item
-        })
+        });
+
+        vec![enum_item, impls_macro_item]
     }
 
     /// Adds `#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]` to the attributes.
@@ -138,5 +146,16 @@ impl IntegerEnum {
             current = int_lit.succ().into_expr(cx, self.min.span);
         }
         vec
+    }
+
+    /// Creates a `bounded_integer_impls` macro invocation item.
+    fn impls_macro_item(&self, variants: &[Variant], cx: &ExtCtxt, sp: Span) -> P<Item> {
+        let path = cx.path_ident(sp, cx.ident_of("bounded_integer_impls"));
+        let mac = codemap::respan(sp, Mac_ {
+            path: path,
+            tts: vec![],
+            ctxt: ast::EMPTY_CTXT,
+        });
+        cx.item(sp, special_idents::invalid, vec![], ItemKind::Mac(mac))
     }
 }
