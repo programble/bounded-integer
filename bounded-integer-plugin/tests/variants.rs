@@ -2,6 +2,9 @@
 #![feature(plugin)]
 #![plugin(bounded_integer_plugin)]
 
+#[macro_use]
+extern crate bounded_integer;
+
 trait AssertVariants {
     fn assert(self);
 }
