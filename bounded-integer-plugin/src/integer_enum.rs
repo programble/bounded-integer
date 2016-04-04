@@ -73,9 +73,19 @@ impl IntegerEnum {
 
         // { $min:expr...$max:expr }
         try!(parser.expect(&Token::OpenDelim(DelimToken::Brace)));
+
         let min = try!(parser.parse_pat_literal_maybe_minus());
+        if IntLit::from_expr(&*min).is_err() {
+            return Err(parser.span_fatal(min.span, "expected integer literal"));
+        }
+
         try!(parser.expect(&Token::DotDotDot));
+
         let max = try!(parser.parse_pat_literal_maybe_minus());
+        if IntLit::from_expr(&*max).is_err() {
+            return Err(parser.span_fatal(max.span, "expected integer literal"));
+        }
+
         try!(parser.expect(&Token::CloseDelim(DelimToken::Brace)));
 
         try!(parser.expect(&Token::Eof));
@@ -136,7 +146,7 @@ impl IntegerEnum {
         let mut vec = Vec::new();
         let mut current = self.min.clone();
         loop {
-            let int_lit = IntLit::from_expr(&*current).unwrap(); // FIXME
+            let int_lit = IntLit::from_expr(&*current).unwrap();
             let mut variant = cx.variant(current.span, int_lit.into_ident(cx), vec![]);
             variant.node.disr_expr = Some(current);
             vec.push(variant);
