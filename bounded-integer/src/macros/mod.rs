@@ -8,8 +8,8 @@
 ///
 /// #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 /// #[repr(u8)]
-/// enum TwoBit { U0, U1, U2, U3 }
-/// bounded_integer_impl!(TwoBit, u8, TwoBit::U0, TwoBit::U3);
+/// enum TwoBit { Z0, P1, P2, P3 }
+/// bounded_integer_impl!(TwoBit, u8, TwoBit::Z0, TwoBit::P3);
 /// # fn main() { }
 /// ```
 #[macro_export]
@@ -89,8 +89,8 @@ macro_rules! bounded_integer_into_repr_impl {
 ///
 /// #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 /// #[repr(u8)]
-/// enum TwoBit { U0, U1, U2, U3 }
-/// bounded_integer_impls!(TwoBit, u8, TwoBit::U0, TwoBit::U3);
+/// enum TwoBit { Z0, P1, P2, P3 }
+/// bounded_integer_impls!(TwoBit, u8, TwoBit::Z0, TwoBit::P3);
 /// # fn main() { }
 /// ```
 #[macro_export]

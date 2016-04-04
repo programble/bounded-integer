@@ -5,9 +5,9 @@ use bounded_integer::BoundedInteger;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Ord)]
 #[allow(dead_code)]
-#[repr(u8)]
+#[repr(i8)]
 enum SNibble {
-    N8 = 248, N7, N6, N5, N4, N3, N2, N1, U0 = 0, P1, P2, P3, P4, P5, P6, P7
+    N8 = -8, N7, N6, N5, N4, N3, N2, N1, Z0, P1, P2, P3, P4, P5, P6, P7
 }
 bounded_integer_impls!(SNibble, i8, SNibble::N8, SNibble::P7);
 bounded_integer_partial_ord_impl!(SNibble);
@@ -16,28 +16,28 @@ bounded_integer_partial_ord_impl!(SNibble);
 #[allow(dead_code)]
 #[repr(u8)]
 enum NZUNibble {
-    U1 = 1, U2, U3, U4, U5, U6, U7, U8, U9, U10, U11, U12, U13, U14, U15
+    P1 = 1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15
 }
-bounded_integer_impls!(NZUNibble, u8, NZUNibble::U1, NZUNibble::U15);
+bounded_integer_impls!(NZUNibble, u8, NZUNibble::P1, NZUNibble::P15);
 
 #[test]
 fn partial_ord() {
     assert!(SNibble::N8 < SNibble::N7);
-    assert!(SNibble::N1 < SNibble::U0);
-    assert!(SNibble::P1 > SNibble::U0);
+    assert!(SNibble::N1 < SNibble::Z0);
+    assert!(SNibble::P1 > SNibble::Z0);
     assert!(SNibble::P7 > SNibble::P6);
 }
 
 #[test]
 fn from_repr() {
-    assert_eq!(Some(SNibble::U0), SNibble::from_repr(0i8));
+    assert_eq!(Some(SNibble::Z0), SNibble::from_repr(0i8));
     assert_eq!(Some(SNibble::N8), SNibble::from_repr(-8i8));
     assert_eq!(Some(SNibble::P7), SNibble::from_repr(7i8));
 }
 
 #[test]
 fn to_repr() {
-    assert_eq!(0i8, SNibble::U0.to_repr());
+    assert_eq!(0i8, SNibble::Z0.to_repr());
     assert_eq!(-8i8, SNibble::N8.to_repr());
     assert_eq!(7i8, SNibble::P7.to_repr());
 }
@@ -85,23 +85,23 @@ fn checked_div() {
     assert_eq!(Some(SNibble::P2), SNibble::P6.checked_div(SNibble::P3));
     assert_eq!(Some(SNibble::P2), SNibble::N6.checked_div(SNibble::N3));
     assert_eq!(Some(SNibble::N2), SNibble::N6.checked_div(SNibble::P3));
-    assert_eq!(None, NZUNibble::U1.checked_div(NZUNibble::U2));
+    assert_eq!(None, NZUNibble::P1.checked_div(NZUNibble::P2));
 }
 
 #[test]
 fn checked_rem() {
     assert_eq!(Some(SNibble::P1), SNibble::P3.checked_rem(SNibble::P2));
     assert_eq!(Some(SNibble::N1), SNibble::N3.checked_rem(SNibble::P2));
-    assert_eq!(None, NZUNibble::U2.checked_rem(NZUNibble::U2));
+    assert_eq!(None, NZUNibble::P2.checked_rem(NZUNibble::P2));
 }
 
 #[test]
 fn checked_neg() {
     assert_eq!(Some(SNibble::N3), SNibble::P3.checked_neg());
     assert_eq!(Some(SNibble::P3), SNibble::N3.checked_neg());
-    assert_eq!(Some(SNibble::U0), SNibble::U0.checked_neg());
+    assert_eq!(Some(SNibble::Z0), SNibble::Z0.checked_neg());
     assert_eq!(None, SNibble::N8.checked_neg());
-    assert_eq!(None, NZUNibble::U3.checked_neg());
+    assert_eq!(None, NZUNibble::P3.checked_neg());
 }
 
 #[test]
@@ -137,14 +137,14 @@ fn checked_div_repr() {
     assert_eq!(Some(SNibble::P2), SNibble::P6.checked_div_repr(3));
     assert_eq!(Some(SNibble::P2), SNibble::N6.checked_div_repr(-3));
     assert_eq!(Some(SNibble::N2), SNibble::N6.checked_div_repr(3));
-    assert_eq!(None, NZUNibble::U1.checked_div_repr(2));
+    assert_eq!(None, NZUNibble::P1.checked_div_repr(2));
 }
 
 #[test]
 fn checked_rem_repr() {
     assert_eq!(Some(SNibble::P1), SNibble::P3.checked_rem_repr(2));
     assert_eq!(Some(SNibble::N1), SNibble::N3.checked_rem_repr(2));
-    assert_eq!(None, NZUNibble::U2.checked_rem_repr(2));
+    assert_eq!(None, NZUNibble::P2.checked_rem_repr(2));
 }
 
 #[test]
@@ -189,7 +189,7 @@ fn saturating_mul_repr() {
 
 #[test]
 fn into_repr() {
-    assert_eq!(0i8, SNibble::U0.into());
+    assert_eq!(0i8, SNibble::Z0.into());
     assert_eq!(-8i8, SNibble::N8.into());
     assert_eq!(7i8, SNibble::P7.into());
 }
@@ -247,7 +247,7 @@ fn div_self() {
 #[test]
 #[should_panic]
 fn div_self_overflow() {
-    let _ = NZUNibble::U1 / NZUNibble::U2;
+    let _ = NZUNibble::P1 / NZUNibble::P2;
 }
 
 #[test]
@@ -261,7 +261,7 @@ fn rem_self() {
 #[test]
 #[should_panic]
 fn rem_self_overflow() {
-    let _ = NZUNibble::U2 % NZUNibble::U2;
+    let _ = NZUNibble::P2 % NZUNibble::P2;
 }
 
 #[test]
@@ -329,7 +329,7 @@ fn div_repr() {
 #[test]
 #[should_panic]
 fn div_repr_overflow() {
-    let _ = NZUNibble::U1 / 2;
+    let _ = NZUNibble::P1 / 2;
 }
 
 #[test]
@@ -343,5 +343,5 @@ fn rem_repr() {
 #[test]
 #[should_panic]
 fn rem_repr_overflow() {
-    let _ = NZUNibble::U2 % 2;
+    let _ = NZUNibble::P2 % 2;
 }
