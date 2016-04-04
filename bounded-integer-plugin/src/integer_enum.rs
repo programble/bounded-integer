@@ -75,18 +75,26 @@ impl IntegerEnum {
         try!(parser.expect(&Token::OpenDelim(DelimToken::Brace)));
 
         let min = try!(parser.parse_pat_literal_maybe_minus());
-        if IntLit::from_expr(&*min).is_err() {
-            return Err(parser.span_fatal(min.span, "expected integer literal"));
-        }
+        let min_lit = match IntLit::from_expr(&*min) {
+            Ok(l) => l,
+            Err(_) => return Err(parser.span_fatal(min.span, "expected integer literal")),
+        };
 
         try!(parser.expect(&Token::DotDotDot));
 
         let max = try!(parser.parse_pat_literal_maybe_minus());
-        if IntLit::from_expr(&*max).is_err() {
-            return Err(parser.span_fatal(max.span, "expected integer literal"));
-        }
+        let max_lit = match IntLit::from_expr(&*max) {
+            Ok(l) => l,
+            Err(_) => return Err(parser.span_fatal(max.span, "expected integer literal")),
+        };
 
         try!(parser.expect(&Token::CloseDelim(DelimToken::Brace)));
+
+        if max_lit < min_lit {
+            return Err(
+                parser.span_fatal(max.span, "maximum must be greater than or equal to minimum")
+            );
+        }
 
         try!(parser.expect(&Token::Eof));
 
@@ -144,6 +152,7 @@ impl IntegerEnum {
     /// Generates variants for the range of the form `N1, Z0, P1`.
     fn variants(&self, cx: &ExtCtxt) -> Vec<Variant> {
         let mut vec = Vec::new();
+        let max_lit = IntLit::from_expr(&*self.max).unwrap();
         let mut current = self.min.clone();
         loop {
             let int_lit = IntLit::from_expr(&*current).unwrap();
@@ -151,8 +160,7 @@ impl IntegerEnum {
             variant.node.disr_expr = Some(current);
             vec.push(variant);
 
-            // FIXME: Infinite loop risk.
-            if Ok(int_lit) == IntLit::from_expr(&*self.max) { break; }
+            if int_lit == max_lit { break; }
             current = int_lit.succ().into_expr(cx, self.min.span);
         }
         vec
