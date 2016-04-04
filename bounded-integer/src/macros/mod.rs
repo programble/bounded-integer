@@ -36,22 +36,6 @@ macro_rules! bounded_integer_impl {
     }
 }
 
-/// Implements `PartialOrd` for a `BoundedInteger`.
-///
-/// Only necessary for signed bounded integer enums. Otherwise, `PartialOrd` can be derived
-/// correctly.
-#[macro_export]
-macro_rules! bounded_integer_partial_ord_impl {
-    ($ty:ty) => {
-        impl PartialOrd for $ty {
-            fn partial_cmp(&self, other: &Self) -> Option<::std::cmp::Ordering> {
-                use $crate::BoundedInteger;
-                self.to_repr().partial_cmp(&other.to_repr())
-            }
-        }
-    }
-}
-
 /// Implements `Into<Self::Repr>` for a `BoundedInteger`.
 #[macro_export]
 macro_rules! bounded_integer_into_repr_impl {

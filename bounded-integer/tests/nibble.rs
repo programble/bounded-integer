@@ -3,14 +3,13 @@ extern crate bounded_integer;
 
 use bounded_integer::BoundedInteger;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Ord)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 #[allow(dead_code)]
 #[repr(i8)]
 enum SNibble {
     N8 = -8, N7, N6, N5, N4, N3, N2, N1, Z0, P1, P2, P3, P4, P5, P6, P7
 }
 bounded_integer_impls!(SNibble, i8, SNibble::N8, SNibble::P7);
-bounded_integer_partial_ord_impl!(SNibble);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 #[allow(dead_code)]
