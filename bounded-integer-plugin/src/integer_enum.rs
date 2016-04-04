@@ -151,6 +151,7 @@ impl IntegerEnum {
     /// Creates a `bounded_integer_impls` macro invocation item.
     fn impls_macro_item(&self, variants: &[Variant], cx: &ExtCtxt, sp: Span) -> P<Item> {
         let path = cx.path_ident(sp, cx.ident_of("bounded_integer_impls"));
+
         let first_variant = variants.first().unwrap();
         let last_variant = variants.last().unwrap();
         let tts = vec![
@@ -169,6 +170,7 @@ impl IntegerEnum {
             TokenTree::Token(sp, Token::ModSep),
             TokenTree::Token(sp, Token::Ident(last_variant.node.name, IdentStyle::Plain)),
         ];
+
         let mac = codemap::respan(sp, Mac_ {
             path: path,
             tts: tts,
