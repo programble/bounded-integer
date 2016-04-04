@@ -1,3 +1,5 @@
+use std::cmp::Ordering;
+
 use syntax::ast::{
     Expr,
     ExprKind,
@@ -65,5 +67,22 @@ impl IntLit {
             (true, i) => IntLit { neg: true, int: i - 1 },
             (false, i) => IntLit { neg: false, int: i + 1 },
         }
+    }
+}
+
+impl PartialOrd for IntLit {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        match (self.neg, other.neg) {
+            (true, false) => Some(Ordering::Less),
+            (false, true) => Some(Ordering::Greater),
+            (true, true) => other.int.partial_cmp(&self.int),
+            (false, false) => self.int.partial_cmp(&other.int),
+        }
+    }
+}
+
+impl Ord for IntLit {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.partial_cmp(other).unwrap()
     }
 }
