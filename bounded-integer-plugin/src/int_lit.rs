@@ -29,8 +29,10 @@ impl IntLit {
                 LitKind::Int(i, _) => Ok(IntLit { neg: false, int: i }),
                 _ => Err(()),
             },
-            ExprKind::Unary(UnOp::Neg, ref expr) => {
-                IntLit::from_expr(&*expr).map(|l| IntLit { neg: true, ..l })
+            ExprKind::Unary(UnOp::Neg, ref expr) => match IntLit::from_expr(&*expr) {
+                Ok(IntLit { int: 0, .. }) => Err(()),
+                Ok(l) => Ok(IntLit { neg: true, ..l }),
+                _ => Err(()),
             },
             _ => Err(()),
         }
