@@ -15,7 +15,7 @@ use syntax::codemap::{self, Span};
 use syntax::errors::DiagnosticBuilder;
 use syntax::ext::base::ExtCtxt;
 use syntax::ext::build::AstBuilder;
-use syntax::parse::token::{DelimToken, InternedString, Token};
+use syntax::parse::token::{DelimToken, IdentStyle, InternedString, Token};
 use syntax::parse::token::keywords::Keyword;
 use syntax::parse::token::special_idents;
 use syntax::ptr::P;
@@ -151,9 +151,27 @@ impl IntegerEnum {
     /// Creates a `bounded_integer_impls` macro invocation item.
     fn impls_macro_item(&self, variants: &[Variant], cx: &ExtCtxt, sp: Span) -> P<Item> {
         let path = cx.path_ident(sp, cx.ident_of("bounded_integer_impls"));
+        let first_variant = variants.first().unwrap();
+        let last_variant = variants.last().unwrap();
+        let tts = vec![
+            TokenTree::Token(sp, Token::Ident(self.name, IdentStyle::Plain)),
+            TokenTree::Token(sp, Token::Comma),
+
+            TokenTree::Token(sp, Token::Ident(self.repr, IdentStyle::Plain)),
+            TokenTree::Token(sp, Token::Comma),
+
+            TokenTree::Token(sp, Token::Ident(self.name, IdentStyle::ModName)),
+            TokenTree::Token(sp, Token::ModSep),
+            TokenTree::Token(sp, Token::Ident(first_variant.node.name, IdentStyle::Plain)),
+            TokenTree::Token(sp, Token::Comma),
+
+            TokenTree::Token(sp, Token::Ident(self.name, IdentStyle::ModName)),
+            TokenTree::Token(sp, Token::ModSep),
+            TokenTree::Token(sp, Token::Ident(last_variant.node.name, IdentStyle::Plain)),
+        ];
         let mac = codemap::respan(sp, Mac_ {
             path: path,
-            tts: vec![],
+            tts: tts,
             ctxt: ast::EMPTY_CTXT,
         });
         cx.item(sp, special_idents::invalid, vec![], ItemKind::Mac(mac))
