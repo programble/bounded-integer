@@ -1,0 +1,12 @@
+[package]
+name = "bounded-integer-meta"
+version = "0.0.0"
+authors = ["Curtis McEnroe <programble@gmail.com>"]
+publish = false
+
+[dependencies]
+bounded-integer = { path = "./bounded-integer" }
+bounded-integer-plugin = { path = "./bounded-integer-plugin" }
+
+[lib]
+path = "/dev/null"
