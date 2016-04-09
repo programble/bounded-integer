@@ -1,4 +1,7 @@
 //! Bounded integer plugin.
+//!
+//! Provides the `bounded_integer!` procedural macro for generating enums with variants for a
+//! range.
 
 #![feature(plugin_registrar, rustc_private)]
 

@@ -114,6 +114,7 @@ impl IntegerEnum {
     /// - Adds `#[repr($repr)]`
     /// - Generates variants of the form `...N1, Z0, P1...`.
     /// - Sets item visibility.
+    /// - Invokes `bounded_integer_impls!` macro.
     pub fn into_items(mut self, cx: &ExtCtxt, sp: Span) -> Vec<P<Item>> {
         self.add_derives(cx, sp);
         self.add_repr(cx, sp);
