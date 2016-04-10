@@ -20,14 +20,6 @@ enum NZUNibble {
 bounded_integer_impls!(NZUNibble, u8, NZUNibble::P1, NZUNibble::P15);
 
 #[test]
-fn partial_ord() {
-    assert!(SNibble::N8 < SNibble::N7);
-    assert!(SNibble::N1 < SNibble::Z0);
-    assert!(SNibble::P1 > SNibble::Z0);
-    assert!(SNibble::P7 > SNibble::P6);
-}
-
-#[test]
 fn from_repr() {
     assert_eq!(Some(SNibble::Z0), SNibble::from_repr(0i8));
     assert_eq!(Some(SNibble::N8), SNibble::from_repr(-8i8));
