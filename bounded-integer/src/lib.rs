@@ -1,4 +1,35 @@
 //! Bounded integers.
+//!
+//! # Examples
+//!
+//! ```ignore
+//! #![feature(plugin)]
+//! #![plugin(bounded_integer_plugin)]
+//!
+//! #[macro_use]
+//! extern crate bounded_integer;
+//!
+//! bounded_integer! {
+//!     /// Value that can fit in a nibble.
+//!     #[derive(Debug)]
+//!     pub enum Nibble: i8 { -8...7 }
+//! }
+//! # fn main() { }
+//! ```
+//!
+//! ```no_run
+//! #[macro_use]
+//! extern crate bounded_integer;
+//!
+//! /// Value that can fit in a nibble.
+//! #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+//! #[repr(i8)]
+//! pub enum Nibble {
+//!     N8 = -8, N7, N6, N5, N4, N3, N2, N1, Z0, P1, P2, P3, P4, P5, P6, P7
+//! }
+//! bounded_integer_impls!(Nibble, i8, Nibble::N8, Nibble::P7);
+//! # fn main() { }
+//! ```
 
 #![warn(
     missing_docs,
