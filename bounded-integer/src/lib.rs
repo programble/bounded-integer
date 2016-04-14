@@ -1,6 +1,20 @@
-//! Bounded integers.
+//! This crate implements *bounded integers*, integer types that are restricted to a user-defined
+//! range of values. It provides macros to generate implementations for C-like enums of the bounded
+//! integer traits, including [`BoundedInteger`](trait.BoundedInteger.html), conversion via `Into`
+//! to the underlying integer representation, and overloads for math operators.
+//!
+//! The `BoundedInteger` trait supports safely converting to and from a bounded integer's
+//! underlying integer representation, getting the minimum and maximum bounds of the type, and
+//! performing checked or saturating math with other bounded integers or integers from the
+//! underlying type.
+//!
+//! Optionally, on nightly, it also provides a `bounded_integer!` compiler plugin macro for
+//! generating an appropriate enum along with the bounded integer implementations.
 //!
 //! # Examples
+//!
+//! This example uses the `bounded_integer!` compiler plugin to generate both an enum and
+//! implementations of the bounded integer traits.
 //!
 //! ```ignore
 //! #![feature(plugin)]
@@ -16,6 +30,10 @@
 //! }
 //! # fn main() { }
 //! ```
+//!
+//! On stable, you must write out the enum variants yourself, but you can use the
+//! `bounded_integer_impls!` macro to generate appropriate implementations of the bounded integer
+//! traits.
 //!
 //! ```no_run
 //! #[macro_use]
