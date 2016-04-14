@@ -51,7 +51,7 @@ macro_rules! bounded_integer_into_repr_impl {
 
 /// Implements all bounded integer traits for an enum.
 ///
-/// - `BoundedInteger`
+/// - [`BoundedInteger`](trait.BoundedInteger.html)
 /// - `Into<Self::Repr>`
 /// - `Add<Self>`
 /// - `Add<Self::Repr>`

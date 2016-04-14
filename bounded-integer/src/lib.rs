@@ -3,10 +3,10 @@
 //! integer traits, including [`BoundedInteger`](trait.BoundedInteger.html), conversion via `Into`
 //! to the underlying integer representation, and overloads for math operators.
 //!
-//! The `BoundedInteger` trait supports safely converting to and from a bounded integer's
-//! underlying integer representation, getting the minimum and maximum bounds of the type, and
-//! performing checked or saturating math with other bounded integers or integers from the
-//! underlying type.
+//! The [`BoundedInteger`](trait.BoundedInteger.html) trait supports safely converting to and from
+//! a bounded integer's underlying integer representation, getting the minimum and maximum bounds
+//! of the type, and performing checked or saturating math with other bounded integers or integers
+//! from the underlying type.
 //!
 //! Optionally, on nightly, it also provides a `bounded_integer!` compiler plugin macro for
 //! generating an appropriate enum along with the bounded integer implementations.
@@ -32,8 +32,8 @@
 //! ```
 //!
 //! On stable, you must write out the enum variants yourself, but you can use the
-//! `bounded_integer_impls!` macro to generate appropriate implementations of the bounded integer
-//! traits.
+//! [`bounded_integer_impls!`](macro.bounded_integer_impls!.html) macro to generate appropriate
+//! implementations of the bounded integer traits.
 //!
 //! ```no_run
 //! #[macro_use]
@@ -68,7 +68,8 @@ mod repr;
 #[macro_use]
 mod macros;
 
-/// Bounded integer.
+/// The main trait for bounded integers. See the [crate-level documentation](index.html) for more
+/// details.
 pub trait BoundedInteger: Copy + Eq + Ord {
     /// Integer representation.
     type Repr: Repr;
