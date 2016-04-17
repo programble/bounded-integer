@@ -12,5 +12,6 @@ readme = "../README.md"
 [lib]
 plugin = true
 
-[dev-dependencies]
-bounded-integer = { path = "../bounded-integer" }
+[dev-dependencies.bounded-integer]
+version = "0.1.0"
+path = "../bounded-integer"
