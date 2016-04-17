@@ -1,20 +1,20 @@
-//! This crate implements *bounded integers*, integer types that are restricted to a user-defined
-//! range of values. It provides macros to generate implementations for C-like enums of the bounded
-//! integer traits, including [`BoundedInteger`](trait.BoundedInteger.html), conversion via `Into`
-//! to the underlying integer representation, and overloads for math operators.
+//! Provides *bounded integers*, integer types which are restricted to a range of values. These
+//! types are created by implementing the [`BoundedInteger`](trait.BoundedInteger.html) trait for
+//! C-like enums.
 //!
-//! The [`BoundedInteger`](trait.BoundedInteger.html) trait supports safely converting to and from
-//! a bounded integer's underlying integer representation, getting the minimum and maximum bounds
-//! of the type, and performing checked or saturating math with other bounded integers or integers
-//! from the underlying type.
+//! This crate provides macros for generating implementations of `BoundedInteger`, `Into`, and
+//! arithmetic traits from `std::ops`. On nightly Rust, the [`bounded-integer-plugin`][plugin]
+//! crate provides a procedural macro for generating enums with variants for a range.
 //!
-//! Optionally, on nightly, it also provides a `bounded_integer!` compiler plugin macro for
-//! generating an appropriate enum along with the bounded integer implementations.
+//! `bounded-integer` is on [Crates.io][crate] and [GitHub][github].
+//!
+//! [plugin]: https://cmcenroe.me/bounded-integer/bounded_integer_plugin
+//! [crate]: https://crates.io/crates/bounded-integer
+//! [github]: https://github.com/programble/bounded-integer
 //!
 //! # Examples
 //!
-//! This example uses the `bounded_integer!` compiler plugin to generate both an enum and
-//! implementations of the bounded integer traits.
+//! ## Nightly
 //!
 //! ```ignore
 //! #![feature(plugin)]
@@ -31,9 +31,9 @@
 //! # fn main() { }
 //! ```
 //!
-//! On stable, you must write out the enum variants yourself, but you can use the
-//! [`bounded_integer_impls!`](macro.bounded_integer_impls!.html) macro to generate appropriate
-//! implementations of the bounded integer traits.
+//! ## Stable
+//!
+//! The above example is equivalent to the following.
 //!
 //! ```no_run
 //! #[macro_use]
