@@ -1,6 +1,16 @@
 # Bounded Integer
 
+[![Crate version][crate-badge]][crate]
+[![Build status][travis-badge]][travis]
+
+[crate]: https://crates.io/crates/bounded-integer
+[travis]: https://travis-ci.org/programble/bounded-integer
+[crate-badge]: https://img.shields.io/crates/v/bounded-integer.svg
+[travis-badge]: https://img.shields.io/travis/programble/bounded-integer/master.svg
+
 Bounded integers for Rust.
+
+## [Documentation](https://cmcenroe.me/bounded-integer/bounded_integer)
 
 ## License
 
