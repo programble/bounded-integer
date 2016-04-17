@@ -1,10 +1,9 @@
 /// Integer representation.
 ///
-/// Should not be implemented for any new types.
+/// Reflects the types valid in `#[repr(...)]` for C-like enums, so should not be implemented for
+/// additional types.
 pub trait Repr: Copy + Eq + Ord {
     /// Returns true if negative.
-    ///
-    /// Used to determine to which bound operations should saturate.
     fn is_negative(self) -> bool;
 
     /// Checked integer addition.
