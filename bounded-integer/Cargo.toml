@@ -1,4 +1,10 @@
 [package]
 name = "bounded-integer"
-version = "0.0.0"
+version = "0.1.0"
 authors = ["Curtis McEnroe <programble@gmail.com>"]
+description = "Bounded integers"
+keywords = ["bounded", "integer", "enum", "range"]
+license = "ISC"
+documentation = "https://cmcenroe.me/bounded-integer/bounded_integer"
+repository = "https://github.com/programble/bounded_integer"
+readme = "../README.md"
