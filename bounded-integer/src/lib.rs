@@ -68,10 +68,13 @@ mod repr;
 #[macro_use]
 mod macros;
 
-/// The main trait for bounded integers. See the [crate-level documentation](index.html) for more
-/// details.
+/// Bounded integers.
+///
+/// Provides conversion, minimum, maximum, checked and saturating arithmetic.
 pub trait BoundedInteger: Copy + Eq + Ord {
     /// Integer representation.
+    ///
+    /// Should reflect the `#[repr(...)]` attribute of `Self`.
     type Repr: Repr;
 
     /// Converts from `Self::Repr` to `Self`.
