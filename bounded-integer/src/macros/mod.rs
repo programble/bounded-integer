@@ -1,12 +1,15 @@
-/// Implements `BoundedInteger` for an enum.
+/// Implements [`BoundedInteger`](trait.BoundedInteger.html) for a C-like enum with contiguous
+/// variants.
+///
+/// Uses `std::mem::transmute` to implement `BoundedInteger::from_repr` and `as` to implement
+/// `BoundedInteger::to_repr`.
 ///
 /// # Examples
 ///
 /// ```
-/// #[macro_use]
-/// extern crate bounded_integer;
-///
-/// #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+/// # #[macro_use]
+/// # extern crate bounded_integer;
+/// #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 /// #[repr(u8)]
 /// enum TwoBit { Z0, P1, P2, P3 }
 /// bounded_integer_impl!(TwoBit, u8, TwoBit::Z0, TwoBit::P3);
@@ -36,7 +39,7 @@ macro_rules! bounded_integer_impl {
     }
 }
 
-/// Implements `Into<Self::Repr>` for a `BoundedInteger`.
+/// Implements `Into<Self::Repr>` for a [`BoundedInteger`](trait.BoundedInteger.html).
 #[macro_export]
 macro_rules! bounded_integer_into_repr_impl {
     ($ty:ty) => {
@@ -49,7 +52,7 @@ macro_rules! bounded_integer_into_repr_impl {
     }
 }
 
-/// Implements all bounded integer traits for an enum.
+/// Implements all bounded integer traits for a C-like enum with contiguous variants.
 ///
 /// - [`BoundedInteger`](trait.BoundedInteger.html)
 /// - `Into<Self::Repr>`
@@ -68,10 +71,9 @@ macro_rules! bounded_integer_into_repr_impl {
 /// # Examples
 ///
 /// ```
-/// #[macro_use]
-/// extern crate bounded_integer;
-///
-/// #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+/// # #[macro_use]
+/// # extern crate bounded_integer;
+/// #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 /// #[repr(u8)]
 /// enum TwoBit { Z0, P1, P2, P3 }
 /// bounded_integer_impls!(TwoBit, u8, TwoBit::Z0, TwoBit::P3);
