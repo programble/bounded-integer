@@ -1,7 +1,32 @@
-//! Bounded integer plugin.
+//! Provides the procedural macro `bounded_integer!` for generating enums for the
+//! [`bounded-integer`][main] crate.
 //!
-//! Provides the `bounded_integer!` procedural macro for generating enums with variants for a
-//! range.
+//! [main]: https://cmcenroe.me/bounded-integer/bounded_integer
+//!
+//! # Syntax
+//!
+//! The syntax parsed by `bounded_integer!` is roughly equivalent to the following
+//! `macro_rules!`-like matcher.
+//!
+//! ```ignore
+//! $(#[$attr:meta])*
+//! $(pub)? enum $name:ident: $repr:ident { $min:expr...$max:expr }
+//! ```
+//!
+//! Which expands to the following:
+//!
+//! ```ignore
+//! $(#[$attr:meta])*
+//! #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+//! #[repr($repr)]
+//! $(pub)? enum $name { ... }
+//! bounded_integer_impls!($name, $repr, ..., ...);
+//! ```
+//!
+//! Where `...` are variants of the form `...N1, Z0, P1...`.
+//!
+//! Note that the `bounded_integer_impls!` macro is provided by the [`bounded-integer`][main]
+//! crate.
 
 #![feature(plugin_registrar, rustc_private)]
 
