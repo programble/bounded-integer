@@ -16,7 +16,7 @@ use syntax::errors::DiagnosticBuilder;
 use syntax::ext::base::ExtCtxt;
 use syntax::ext::build::AstBuilder;
 use syntax::parse::token::{DelimToken, IdentStyle, InternedString, Token};
-use syntax::parse::token::keywords::Keyword;
+use syntax::parse::token::keywords;
 use syntax::parse::token::special_idents;
 use syntax::ptr::P;
 
@@ -63,8 +63,8 @@ impl IntegerEnum {
         let attrs = try!(parser.parse_outer_attributes());
 
         // $(pub)? enum
-        let is_pub = parser.eat_keyword(Keyword::Pub);
-        try!(parser.expect_keyword(Keyword::Enum));
+        let is_pub = parser.eat_keyword(keywords::Pub);
+        try!(parser.expect_keyword(keywords::Enum));
 
         // $name:ident: $repr:ident
         let name = try!(parser.parse_ident());
