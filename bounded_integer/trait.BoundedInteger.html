@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `BoundedInteger` trait in crate `bounded_integer`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, BoundedInteger">
+
+    <title>bounded_integer::BoundedInteger - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='index.html'>bounded_integer</a></p><script>window.sidebarCurrent = {name: 'BoundedInteger', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content trait">
+<h1 class='fqn'><span class='in-band'>Trait <a href='index.html'>bounded_integer</a>::<wbr><a class='trait' href=''>BoundedInteger</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-191' class='srclink' href='../src/bounded_integer/bounded-integer/src/lib.rs.html#74-196' title='goto source code'>[src]</a></span></h1>
+<pre class='rust trait'>pub trait BoundedInteger: <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html' title='core::cmp::Eq'>Eq</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.Ord.html' title='core::cmp::Ord'>Ord</a> {
+    type <a href='#associatedtype.Repr' class='type'>Repr</a>: <a class='trait' href='../bounded_integer/trait.Repr.html' title='bounded_integer::Repr'>Repr</a>;
+    fn <a href='#tymethod.from_repr' class='fnname'>from_repr</a>(repr: Self::<a class='trait' href='../bounded_integer/trait.BoundedInteger.html' title='bounded_integer::BoundedInteger'>Repr</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt;;
+    fn <a href='#tymethod.to_repr' class='fnname'>to_repr</a>(self) -&gt; Self::<a class='trait' href='../bounded_integer/trait.BoundedInteger.html' title='bounded_integer::BoundedInteger'>Repr</a>;
+    fn <a href='#tymethod.min_value' class='fnname'>min_value</a>() -&gt; Self;
+    fn <a href='#tymethod.max_value' class='fnname'>max_value</a>() -&gt; Self;
+
+    fn <a href='#method.checked_add' class='fnname'>checked_add</a>(self, other: Self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt; { ... }
+    fn <a href='#method.checked_sub' class='fnname'>checked_sub</a>(self, other: Self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt; { ... }
+    fn <a href='#method.checked_mul' class='fnname'>checked_mul</a>(self, other: Self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt; { ... }
+    fn <a href='#method.checked_div' class='fnname'>checked_div</a>(self, other: Self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt; { ... }
+    fn <a href='#method.checked_rem' class='fnname'>checked_rem</a>(self, other: Self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt; { ... }
+    fn <a href='#method.checked_neg' class='fnname'>checked_neg</a>(self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt; { ... }
+    fn <a href='#method.checked_add_repr' class='fnname'>checked_add_repr</a>(self, other: Self::<a class='trait' href='../bounded_integer/trait.BoundedInteger.html' title='bounded_integer::BoundedInteger'>Repr</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt; { ... }
+    fn <a href='#method.checked_sub_repr' class='fnname'>checked_sub_repr</a>(self, other: Self::<a class='trait' href='../bounded_integer/trait.BoundedInteger.html' title='bounded_integer::BoundedInteger'>Repr</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt; { ... }
+    fn <a href='#method.checked_mul_repr' class='fnname'>checked_mul_repr</a>(self, other: Self::<a class='trait' href='../bounded_integer/trait.BoundedInteger.html' title='bounded_integer::BoundedInteger'>Repr</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt; { ... }
+    fn <a href='#method.checked_div_repr' class='fnname'>checked_div_repr</a>(self, other: Self::<a class='trait' href='../bounded_integer/trait.BoundedInteger.html' title='bounded_integer::BoundedInteger'>Repr</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt; { ... }
+    fn <a href='#method.checked_rem_repr' class='fnname'>checked_rem_repr</a>(self, other: Self::<a class='trait' href='../bounded_integer/trait.BoundedInteger.html' title='bounded_integer::BoundedInteger'>Repr</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt; { ... }
+    fn <a href='#method.saturating_add' class='fnname'>saturating_add</a>(self, other: Self) -&gt; Self { ... }
+    fn <a href='#method.saturating_sub' class='fnname'>saturating_sub</a>(self, other: Self) -&gt; Self { ... }
+    fn <a href='#method.saturating_mul' class='fnname'>saturating_mul</a>(self, other: Self) -&gt; Self { ... }
+    fn <a href='#method.saturating_add_repr' class='fnname'>saturating_add_repr</a>(self, other: Self::<a class='trait' href='../bounded_integer/trait.BoundedInteger.html' title='bounded_integer::BoundedInteger'>Repr</a>) -&gt; Self { ... }
+    fn <a href='#method.saturating_sub_repr' class='fnname'>saturating_sub_repr</a>(self, other: Self::<a class='trait' href='../bounded_integer/trait.BoundedInteger.html' title='bounded_integer::BoundedInteger'>Repr</a>) -&gt; Self { ... }
+    fn <a href='#method.saturating_mul_repr' class='fnname'>saturating_mul_repr</a>(self, other: Self::<a class='trait' href='../bounded_integer/trait.BoundedInteger.html' title='bounded_integer::BoundedInteger'>Repr</a>) -&gt; Self { ... }
+}</pre><div class='docblock'><p>Bounded integers.</p>
+
+<p>Provides conversion, minimum, maximum, checked and saturating arithmetic.</p>
+</div>
+            <h2 id='associated-types'>Associated Types</h2>
+            <div class='methods'>
+        <h3 id='associatedtype.Repr' class='method stab '><code>type <a href='#associatedtype.Repr' class='type'>Repr</a>: <a class='trait' href='../bounded_integer/trait.Repr.html' title='bounded_integer::Repr'>Repr</a></code></h3><div class='docblock'><p>Integer representation.</p>
+
+<p>Should reflect the <code>#[repr(...)]</code> attribute of <code>Self</code>.</p>
+</div></div>
+            <h2 id='required-methods'>Required Methods</h2>
+            <div class='methods'>
+        <h3 id='tymethod.from_repr' class='method stab '><code>fn <a href='#tymethod.from_repr' class='fnname'>from_repr</a>(repr: Self::<a class='trait' href='../bounded_integer/trait.BoundedInteger.html' title='bounded_integer::BoundedInteger'>Repr</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt;</code></h3><div class='docblock'><p>Converts from <code>Self::Repr</code> to <code>Self</code>.</p>
+</div><h3 id='tymethod.to_repr' class='method stab '><code>fn <a href='#tymethod.to_repr' class='fnname'>to_repr</a>(self) -&gt; Self::<a class='trait' href='../bounded_integer/trait.BoundedInteger.html' title='bounded_integer::BoundedInteger'>Repr</a></code></h3><div class='docblock'><p>Converts from <code>Self</code> to <code>Self::Repr</code>.</p>
+</div><h3 id='tymethod.min_value' class='method stab '><code>fn <a href='#tymethod.min_value' class='fnname'>min_value</a>() -&gt; Self</code></h3><div class='docblock'><p>Returns the smallest value that can be represented as <code>Self</code>.</p>
+</div><h3 id='tymethod.max_value' class='method stab '><code>fn <a href='#tymethod.max_value' class='fnname'>max_value</a>() -&gt; Self</code></h3><div class='docblock'><p>Returns the largest value that can be represented as <code>Self</code>.</p>
+</div></div>
+            <h2 id='provided-methods'>Provided Methods</h2>
+            <div class='methods'>
+        <h3 id='method.checked_add' class='method stab '><code>fn <a href='#method.checked_add' class='fnname'>checked_add</a>(self, other: Self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt;</code></h3><div class='docblock'><p>Checked integer addition.</p>
+</div><h3 id='method.checked_sub' class='method stab '><code>fn <a href='#method.checked_sub' class='fnname'>checked_sub</a>(self, other: Self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt;</code></h3><div class='docblock'><p>Checked integer subtraction.</p>
+</div><h3 id='method.checked_mul' class='method stab '><code>fn <a href='#method.checked_mul' class='fnname'>checked_mul</a>(self, other: Self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt;</code></h3><div class='docblock'><p>Checked integer multiplication.</p>
+</div><h3 id='method.checked_div' class='method stab '><code>fn <a href='#method.checked_div' class='fnname'>checked_div</a>(self, other: Self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt;</code></h3><div class='docblock'><p>Checked integer division.</p>
+</div><h3 id='method.checked_rem' class='method stab '><code>fn <a href='#method.checked_rem' class='fnname'>checked_rem</a>(self, other: Self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt;</code></h3><div class='docblock'><p>Checked integer remainder.</p>
+</div><h3 id='method.checked_neg' class='method stab '><code>fn <a href='#method.checked_neg' class='fnname'>checked_neg</a>(self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt;</code></h3><div class='docblock'><p>Checked integer negation.</p>
+</div><h3 id='method.checked_add_repr' class='method stab '><code>fn <a href='#method.checked_add_repr' class='fnname'>checked_add_repr</a>(self, other: Self::<a class='trait' href='../bounded_integer/trait.BoundedInteger.html' title='bounded_integer::BoundedInteger'>Repr</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt;</code></h3><div class='docblock'><p>Checked integer addition with <code>Self::Repr</code>.</p>
+</div><h3 id='method.checked_sub_repr' class='method stab '><code>fn <a href='#method.checked_sub_repr' class='fnname'>checked_sub_repr</a>(self, other: Self::<a class='trait' href='../bounded_integer/trait.BoundedInteger.html' title='bounded_integer::BoundedInteger'>Repr</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt;</code></h3><div class='docblock'><p>Checked integer subtraction with <code>Self::Repr</code>.</p>
+</div><h3 id='method.checked_mul_repr' class='method stab '><code>fn <a href='#method.checked_mul_repr' class='fnname'>checked_mul_repr</a>(self, other: Self::<a class='trait' href='../bounded_integer/trait.BoundedInteger.html' title='bounded_integer::BoundedInteger'>Repr</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt;</code></h3><div class='docblock'><p>Checked integer multiplication with <code>Self::Repr</code>.</p>
+</div><h3 id='method.checked_div_repr' class='method stab '><code>fn <a href='#method.checked_div_repr' class='fnname'>checked_div_repr</a>(self, other: Self::<a class='trait' href='../bounded_integer/trait.BoundedInteger.html' title='bounded_integer::BoundedInteger'>Repr</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt;</code></h3><div class='docblock'><p>Checked integer division with <code>Self::Repr</code>.</p>
+</div><h3 id='method.checked_rem_repr' class='method stab '><code>fn <a href='#method.checked_rem_repr' class='fnname'>checked_rem_repr</a>(self, other: Self::<a class='trait' href='../bounded_integer/trait.BoundedInteger.html' title='bounded_integer::BoundedInteger'>Repr</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;Self&gt;</code></h3><div class='docblock'><p>Checked integer remainder with <code>Self::Repr</code>.</p>
+</div><h3 id='method.saturating_add' class='method stab '><code>fn <a href='#method.saturating_add' class='fnname'>saturating_add</a>(self, other: Self) -&gt; Self</code></h3><div class='docblock'><p>Saturating integer addition.</p>
+</div><h3 id='method.saturating_sub' class='method stab '><code>fn <a href='#method.saturating_sub' class='fnname'>saturating_sub</a>(self, other: Self) -&gt; Self</code></h3><div class='docblock'><p>Saturating integer subtraction.</p>
+</div><h3 id='method.saturating_mul' class='method stab '><code>fn <a href='#method.saturating_mul' class='fnname'>saturating_mul</a>(self, other: Self) -&gt; Self</code></h3><div class='docblock'><p>Saturating integer multiplication.</p>
+</div><h3 id='method.saturating_add_repr' class='method stab '><code>fn <a href='#method.saturating_add_repr' class='fnname'>saturating_add_repr</a>(self, other: Self::<a class='trait' href='../bounded_integer/trait.BoundedInteger.html' title='bounded_integer::BoundedInteger'>Repr</a>) -&gt; Self</code></h3><div class='docblock'><p>Saturating integer addition with <code>Self::Repr</code>.</p>
+</div><h3 id='method.saturating_sub_repr' class='method stab '><code>fn <a href='#method.saturating_sub_repr' class='fnname'>saturating_sub_repr</a>(self, other: Self::<a class='trait' href='../bounded_integer/trait.BoundedInteger.html' title='bounded_integer::BoundedInteger'>Repr</a>) -&gt; Self</code></h3><div class='docblock'><p>Saturating integer subtraction with <code>Self::Repr</code>.</p>
+</div><h3 id='method.saturating_mul_repr' class='method stab '><code>fn <a href='#method.saturating_mul_repr' class='fnname'>saturating_mul_repr</a>(self, other: Self::<a class='trait' href='../bounded_integer/trait.BoundedInteger.html' title='bounded_integer::BoundedInteger'>Repr</a>) -&gt; Self</code></h3><div class='docblock'><p>Saturating integer multiplication with <code>Self::Repr</code>.</p>
+</div></div>
+        <h2 id='implementors'>Implementors</h2>
+        <ul class='item-list' id='implementors-list'>
+    </ul><script type="text/javascript" async
+                         src="../implementors/bounded_integer/trait.BoundedInteger.js">
+                 </script></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "bounded_integer";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

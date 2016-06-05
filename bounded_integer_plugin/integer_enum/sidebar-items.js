@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["IntegerEnum","Parsed bounded integer enum."]]});

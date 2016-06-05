@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["expand_bounded_integer","Expands the `bounded_integer!` macro."],["plugin_registrar","Registers the `bounded_integer!` macro."]],"struct":[["IntLit","Signed integer literal."],["IntegerEnum","Parsed bounded integer enum."]]});
